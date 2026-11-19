@@ -1,0 +1,327 @@
+<roblox version="4">
+<Item class="Workspace" referent="RBX20">
+<Properties>
+<string name="Name">Workspace</string>
+</Properties>
+<Item class="Part" referent="RBX10">
+<Properties>
+<string name="Name">Baseplate</string>
+<bool name="Anchored">true</bool>
+<CoordinateFrame name="CFrame"><X>0</X><Y>-10</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<Vector3 name="size"><X>512</X><Y>20</Y><Z>512</Z></Vector3>
+<token name="shape">1</token>
+<token name="Material">272</token>
+<Color3uint8 name="Color3uint8">4280163875</Color3uint8>
+</Properties>
+</Item>
+<Item class="SpawnLocation" referent="RBX11">
+<Properties>
+<string name="Name">SpawnLocation</string>
+<bool name="Anchored">true</bool>
+<bool name="Neutral">true</bool>
+<CoordinateFrame name="CFrame"><X>18</X><Y>0.5</Y><Z>18</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<Vector3 name="size"><X>6</X><Y>1</Y><Z>6</Z></Vector3>
+<token name="Material">272</token>
+<Color3uint8 name="Color3uint8">4284111460</Color3uint8>
+</Properties>
+</Item>
+<Item class="Model" referent="RBX0">
+<Properties>
+<string name="Name">DiscoLight</string>
+</Properties>
+
+<Item class="Part" referent="RBX1">
+<Properties>
+<string name="Name">Base</string>
+<bool name="Anchored">true</bool>
+<CoordinateFrame name="CFrame"><X>0</X><Y>0.5</Y><Z>0</Z><R00>0</R00><R01>-1</R01><R02>0</R02><R10>1</R10><R11>0</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<Vector3 name="size"><X>1</X><Y>6</Y><Z>6</Z></Vector3>
+<token name="shape">2</token>
+<token name="Material">1088</token>
+<Color3uint8 name="Color3uint8">4280163875</Color3uint8>
+</Properties>
+</Item>
+
+<Item class="Part" referent="RBX2">
+<Properties>
+<string name="Name">Pole</string>
+<bool name="Anchored">true</bool>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5</Y><Z>0</Z><R00>0</R00><R01>-1</R01><R02>0</R02><R10>1</R10><R11>0</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<Vector3 name="size"><X>8</X><Y>0.7</Y><Z>0.7</Z></Vector3>
+<token name="shape">2</token>
+<token name="Material">1088</token>
+<Color3uint8 name="Color3uint8">4284111460</Color3uint8>
+</Properties>
+</Item>
+
+<Item class="Part" referent="RBX3">
+<Properties>
+<string name="Name">Motor</string>
+<bool name="Anchored">true</bool>
+<CoordinateFrame name="CFrame"><X>0</X><Y>9.6</Y><Z>0</Z><R00>0</R00><R01>-1</R01><R02>0</R02><R10>1</R10><R11>0</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<Vector3 name="size"><X>1.2</X><Y>2.6</Y><Z>2.6</Z></Vector3>
+<token name="shape">2</token>
+<token name="Material">1088</token>
+<Color3uint8 name="Color3uint8">4280163875</Color3uint8>
+</Properties>
+</Item>
+
+<Item class="Part" referent="RBX4">
+<Properties>
+<string name="Name">Core</string>
+<bool name="Anchored">true</bool>
+<CoordinateFrame name="CFrame"><X>0</X><Y>12.7</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<Vector3 name="size"><X>5</X><Y>5</Y><Z>5</Z></Vector3>
+<token name="shape">0</token>
+<token name="Material">272</token>
+<Color3uint8 name="Color3uint8">4280163875</Color3uint8>
+</Properties>
+</Item>
+
+<Item class="Script" referent="RBX5">
+<Properties>
+<string name="Name">DiscoLightScript</string>
+<bool name="Disabled">false</bool>
+<token name="RunContext">2</token>
+<ProtectedString name="Source"><![CDATA[-- DiscoLight: al dar Play se construye todo y empieza a moverse.
+-- Puedes cambiar estos Attributes del modelo DiscoLight:
+--   Speed (velocidad), BPM (ritmo), Brightness (brillo), Strobe (true/false)
+
+local RunService = game:GetService("RunService")
+
+local model = script.Parent
+local core = model:WaitForChild("Core")
+local motor = model:WaitForChild("Motor")
+
+for name, default in pairs({Speed = 1, BPM = 124, Brightness = 1, Strobe = false}) do
+	if model:GetAttribute(name) == nil then
+		model:SetAttribute(name, default)
+	end
+end
+
+local centerCF = core.CFrame
+local R = core.Size.X / 2
+local BEAM_LEN = 30
+
+local function newPart(size, parent)
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.CanCollide = false
+	p.CanQuery = false
+	p.CanTouch = false
+	p.CastShadow = false
+	p.Size = size
+	p.Parent = parent
+	return p
+end
+
+-- Cabeza giratoria (bola de espejos + luces que giran con ella)
+local head = Instance.new("Model")
+head.Name = "MirrorBall"
+core.Parent = head
+head.PrimaryPart = core
+head.Parent = model
+
+-- Luz y chispas del centro
+local coreLight = Instance.new("PointLight")
+coreLight.Range = 22
+coreLight.Brightness = 2
+coreLight.Parent = core
+
+local sparkles = Instance.new("ParticleEmitter")
+sparkles.Rate = 18
+sparkles.Lifetime = NumberRange.new(1, 2)
+sparkles.Speed = NumberRange.new(2, 6)
+sparkles.SpreadAngle = Vector2.new(180, 180)
+sparkles.LightEmission = 1
+sparkles.Size = NumberSequence.new({
+	NumberSequenceKeypoint.new(0, 0.5),
+	NumberSequenceKeypoint.new(1, 0),
+})
+sparkles.Parent = core
+
+-- Espejitos de la bola
+local whiteColor = Color3.fromRGB(225, 230, 240)
+local facets = {}
+local rows = 9
+for i = 1, rows - 1 do
+	local phi = math.pi * i / rows
+	local ringR = R * math.sin(phi)
+	local count = math.max(5, math.floor(2 * math.pi * ringR / 0.75))
+	for j = 0, count - 1 do
+		local theta = (j + (i % 2) * 0.5) / count * 2 * math.pi
+		local dir = Vector3.new(
+			math.sin(phi) * math.cos(theta),
+			math.cos(phi),
+			math.sin(phi) * math.sin(theta)
+		)
+		local pos = centerCF.Position + dir * (R + 0.02)
+		local f = newPart(Vector3.new(0.62, 0.62, 0.1), head)
+		f.Material = Enum.Material.Metal
+		f.Reflectance = 0.5
+		f.Color = whiteColor
+		f.CFrame = CFrame.lookAt(pos, pos + dir)
+		table.insert(facets, f)
+	end
+end
+
+-- Focos y rayos que salen de la bola
+local ballLights = {}
+local rings = {
+	{phi = 60, n = 5},
+	{phi = 100, n = 5},
+	{phi = 135, n = 4},
+}
+for ri, ring in ipairs(rings) do
+	for k = 0, ring.n - 1 do
+		local phi = math.rad(ring.phi)
+		local theta = (k / ring.n + ri * 0.13) * 2 * math.pi
+		local dir = Vector3.new(
+			math.sin(phi) * math.cos(theta),
+			math.cos(phi),
+			math.sin(phi) * math.sin(theta)
+		)
+		local pos = centerCF.Position + dir * (R + 0.3)
+		local cf = CFrame.lookAt(pos, pos + dir)
+
+		local emitter = newPart(Vector3.new(0.3, 0.3, 0.3), head)
+		emitter.Transparency = 1
+		emitter.CFrame = cf
+
+		local light = Instance.new("SpotLight")
+		light.Range = 45
+		light.Angle = 40
+		light.Face = Enum.NormalId.Front
+		light.Brightness = 4
+		light.Parent = emitter
+
+		local beam = newPart(Vector3.new(0.18, 0.18, BEAM_LEN), head)
+		beam.Material = Enum.Material.Neon
+		beam.CFrame = cf * CFrame.new(0, 0, -(BEAM_LEN / 2 + 0.2))
+
+		table.insert(ballLights, {light = light, beam = beam})
+	end
+end
+
+-- Cabezas móviles (moving heads) alrededor del motor
+local heads = {}
+local HEAD_COUNT = 6
+local darkMetal = Color3.fromRGB(25, 25, 30)
+for i = 1, HEAD_COUNT do
+	local a = (i - 1) / HEAD_COUNT * 2 * math.pi
+	local pos = motor.Position + Vector3.new(math.cos(a) * 2.4, -0.2, math.sin(a) * 2.4)
+
+	local arm = newPart(Vector3.new(0.3, 0.3, (pos - motor.Position).Magnitude), model)
+	arm.Material = Enum.Material.Metal
+	arm.Color = darkMetal
+	arm.CFrame = CFrame.lookAt((pos + motor.Position) / 2, pos)
+
+	local body = newPart(Vector3.new(0.9, 0.9, 1.4), model)
+	body.Material = Enum.Material.Metal
+	body.Color = darkMetal
+
+	local light = Instance.new("SpotLight")
+	light.Range = 60
+	light.Angle = 25
+	light.Face = Enum.NormalId.Front
+	light.Brightness = 6
+	light.Parent = body
+
+	local beam = newPart(Vector3.new(0.35, 0.35, BEAM_LEN + 10), model)
+	beam.Material = Enum.Material.Neon
+
+	heads[i] = {
+		pos = pos,
+		body = body,
+		beam = beam,
+		light = light,
+		phase = a,
+		dir = (i % 2 == 0) and -1 or 1,
+	}
+end
+
+-- Destellos aleatorios en los espejos
+task.spawn(function()
+	while model.Parent do
+		for _ = 1, 8 do
+			local f = facets[math.random(#facets)]
+			f.Color = Color3.fromHSV(math.random(), 0.6, 1)
+			f.Material = Enum.Material.Neon
+			task.delay(0.18, function()
+				f.Color = whiteColor
+				f.Material = Enum.Material.Metal
+			end)
+		end
+		task.wait(0.06)
+	end
+end)
+
+-- Animación principal
+local t, beatT = 0, 0
+local conn
+conn = RunService.Heartbeat:Connect(function(dt)
+	local speed = model:GetAttribute("Speed") or 1
+	local bpm = model:GetAttribute("BPM") or 124
+	local bright = model:GetAttribute("Brightness") or 1
+	local strobe = model:GetAttribute("Strobe") == true
+
+	t += dt * speed
+	beatT += dt
+
+	local beat = (math.sin(beatT * 2 * math.pi * bpm / 60) * 0.5 + 0.5) ^ 3
+	local pulse = 0.5 + 0.5 * beat
+	if strobe then
+		pulse = (math.floor(beatT * 14) % 2 == 0) and 1 or 0.05
+	end
+
+	-- La bola gira
+	head:PivotTo(centerCF * CFrame.Angles(0, t * 0.7, 0))
+
+	local baseHue = (t * 0.07) % 1
+	local mainColor = Color3.fromHSV(baseHue, 0.8, 1)
+	coreLight.Color = mainColor
+	coreLight.Brightness = 2 * bright * pulse
+	sparkles.Color = ColorSequence.new(mainColor)
+
+	for idx, bl in ipairs(ballLights) do
+		local c = Color3.fromHSV((baseHue + idx / #ballLights) % 1, 0.9, 1)
+		bl.light.Color = c
+		bl.light.Brightness = 4 * bright * pulse
+		bl.beam.Color = c
+		bl.beam.Transparency = 0.88 - 0.18 * pulse
+	end
+
+	for idx, h in ipairs(heads) do
+		local pan = t * 0.9 * h.dir + h.phase
+		local tilt = math.rad(-5 + 55 * (0.5 + 0.5 * math.sin(t * 1.4 + h.phase * 2)))
+		local cf = CFrame.new(h.pos) * CFrame.Angles(0, pan, 0) * CFrame.Angles(tilt, 0, 0)
+		h.body.CFrame = cf
+		h.beam.CFrame = cf * CFrame.new(0, 0, -((BEAM_LEN + 10) / 2 + 0.7))
+
+		local c = Color3.fromHSV((baseHue * 1.5 + idx / HEAD_COUNT) % 1, 1, 1)
+		h.light.Color = c
+		h.light.Brightness = 6 * bright * pulse
+		h.beam.Color = c
+		h.beam.Transparency = 0.85 - 0.15 * pulse
+	end
+end)
+
+model.Destroying:Connect(function()
+	conn:Disconnect()
+end)
+]]></ProtectedString>
+</Properties>
+</Item>
+
+</Item>
+
+</Item>
+<Item class="Lighting" referent="RBX21">
+<Properties>
+<string name="Name">Lighting</string>
+<double name="ClockTime">0</double>
+<Color3 name="Ambient"><R>0.05</R><G>0.05</G><B>0.08</B></Color3>
+<Color3 name="OutdoorAmbient"><R>0.05</R><G>0.05</G><B>0.08</B></Color3>
+</Properties>
+</Item>
+</roblox>
