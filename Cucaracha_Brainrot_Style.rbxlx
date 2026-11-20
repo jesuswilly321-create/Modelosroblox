@@ -1,0 +1,1149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.roblox.com/roblox.xsd" version="4">
+  <Item class="Model" referent="RBX0">
+    <Properties>
+      <string name="Name">Cucaracha_Brainrot_Style</string>
+      <bool name="Archivable">true</bool>
+    </Properties>
+
+    <Item class="Part" referent="RBX1001">
+      <Properties>
+        <string name="Name">Abdomen_Core</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.15</Y><Z>1.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.15</Y><Z>1.05</Z></Vector3>
+        <Vector3 name="Size"><X>2.6</X><Y>1</Y><Z>3.25</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1002">
+      <Properties>
+        <string name="Name">Abdomen_Underside</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>1.78</Y><Z>1.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>1.78</Y><Z>1.05</Z></Vector3>
+        <Vector3 name="Size"><X>2.25</X><Y>0.48</Y><Z>2.8</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1003">
+      <Properties>
+        <string name="Name">Abdomen_Segment_1</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.7</Y><Z>2.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.7</Y><Z>2.1</Z></Vector3>
+        <Vector3 name="Size"><X>2.48</X><Y>0.2</Y><Z>0.48</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1004">
+      <Properties>
+        <string name="Name">Abdomen_Segment_2</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.7</Y><Z>1.45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.7</Y><Z>1.45</Z></Vector3>
+        <Vector3 name="Size"><X>2.48</X><Y>0.2</Y><Z>0.48</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1005">
+      <Properties>
+        <string name="Name">Abdomen_Segment_3</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.7</Y><Z>0.8</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.7</Y><Z>0.8</Z></Vector3>
+        <Vector3 name="Size"><X>2.48</X><Y>0.2</Y><Z>0.48</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1006">
+      <Properties>
+        <string name="Name">Abdomen_Segment_4</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.7</Y><Z>0.15</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.7</Y><Z>0.15</Z></Vector3>
+        <Vector3 name="Size"><X>2.3</X><Y>0.2</Y><Z>0.48</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1007">
+      <Properties>
+        <string name="Name">Abdomen_Segment_5</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.7</Y><Z>-0.45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.7</Y><Z>-0.45</Z></Vector3>
+        <Vector3 name="Size"><X>2.3</X><Y>0.2</Y><Z>0.48</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1008">
+      <Properties>
+        <string name="Name">Left_Wing_Case</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.59</X><Y>2.83</Y><Z>0.82</Z><R00>0.99619</R00><R01>0.08716</R01><R02>0</R02><R10>-0.08716</R10><R11>0.99619</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.59</X><Y>2.83</Y><Z>0.82</Z></Vector3>
+        <Vector3 name="Size"><X>1.18</X><Y>0.34</Y><Z>2.45</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1009">
+      <Properties>
+        <string name="Name">Right_Wing_Case</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.59</X><Y>2.83</Y><Z>0.82</Z><R00>0.99619</R00><R01>-0.08716</R01><R02>0</R02><R10>0.08716</R10><R11>0.99619</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.59</X><Y>2.83</Y><Z>0.82</Z></Vector3>
+        <Vector3 name="Size"><X>1.18</X><Y>0.34</Y><Z>2.45</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1010">
+      <Properties>
+        <string name="Name">Wing_Center_Seam</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>3.02</Y><Z>0.82</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>3.02</Y><Z>0.82</Z></Vector3>
+        <Vector3 name="Size"><X>0.09</X><Y>0.18</Y><Z>2.35</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1011">
+      <Properties>
+        <string name="Name">Thorax</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.35</Y><Z>-1.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.35</Y><Z>-1.05</Z></Vector3>
+        <Vector3 name="Size"><X>2</X><Y>0.92</Y><Z>1.2</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1012">
+      <Properties>
+        <string name="Name">Pronotum_Shield</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.91</Y><Z>-1.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.91</Y><Z>-1.1</Z></Vector3>
+        <Vector3 name="Size"><X>2.2</X><Y>0.34</Y><Z>1.05</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1013">
+      <Properties>
+        <string name="Name">Head</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.1</Y><Z>-2</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.1</Y><Z>-2</Z></Vector3>
+        <Vector3 name="Size"><X>1.42</X><Y>1.05</Y><Z>1.08</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1014">
+      <Properties>
+        <string name="Name">Face_Plate</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.02</Y><Z>-2.58</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>2.02</Y><Z>-2.58</Z></Vector3>
+        <Vector3 name="Size"><X>1.2</X><Y>0.66</Y><Z>0.18</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1015">
+      <Properties>
+        <string name="Name">Left_Compound_Eye</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.55</X><Y>2.4</Y><Z>-2.6</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.55</X><Y>2.4</Y><Z>-2.6</Z></Vector3>
+        <Vector3 name="Size"><X>0.36</X><Y>0.48</Y><Z>0.2</Z></Vector3>
+        <Color3 name="Color"><R>0.95</R><G>0.12</G><B>0.055</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1016">
+      <Properties>
+        <string name="Name">Left_Eye_Glint</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.61</X><Y>2.52</Y><Z>-2.72</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.61</X><Y>2.52</Y><Z>-2.72</Z></Vector3>
+        <Vector3 name="Size"><X>0.12</X><Y>0.13</Y><Z>0.07</Z></Vector3>
+        <Color3 name="Color"><R>1</R><G>0.83</G><B>0.62</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1017">
+      <Properties>
+        <string name="Name">Right_Compound_Eye</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.55</X><Y>2.4</Y><Z>-2.6</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.55</X><Y>2.4</Y><Z>-2.6</Z></Vector3>
+        <Vector3 name="Size"><X>0.36</X><Y>0.48</Y><Z>0.2</Z></Vector3>
+        <Color3 name="Color"><R>0.95</R><G>0.12</G><B>0.055</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1018">
+      <Properties>
+        <string name="Name">Right_Eye_Glint</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.49</X><Y>2.52</Y><Z>-2.72</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.49</X><Y>2.52</Y><Z>-2.72</Z></Vector3>
+        <Vector3 name="Size"><X>0.12</X><Y>0.13</Y><Z>0.07</Z></Vector3>
+        <Color3 name="Color"><R>1</R><G>0.83</G><B>0.62</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1019">
+      <Properties>
+        <string name="Name">Mouth_Center</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>1.76</Y><Z>-2.7</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0</X><Y>1.76</Y><Z>-2.7</Z></Vector3>
+        <Vector3 name="Size"><X>0.42</X><Y>0.18</Y><Z>0.14</Z></Vector3>
+        <Color3 name="Color"><R>0.045</R><G>0.025</G><B>0.018</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1020">
+      <Properties>
+        <string name="Name">Left_Mandible</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.22</X><Y>1.65</Y><Z>-2.67</Z><R00>0.95106</R00><R01>0.30902</R01><R02>0</R02><R10>-0.30902</R10><R11>0.95106</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.22</X><Y>1.65</Y><Z>-2.67</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.24</Y><Z>0.2</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1021">
+      <Properties>
+        <string name="Name">Right_Mandible</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.22</X><Y>1.65</Y><Z>-2.67</Z><R00>0.95106</R00><R01>-0.30902</R01><R02>0</R02><R10>0.30902</R10><R11>0.95106</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.22</X><Y>1.65</Y><Z>-2.67</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.24</Y><Z>0.2</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1022">
+      <Properties>
+        <string name="Name">Front_Left_Hip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.88</X><Y>1.75</Y><Z>-1.55</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.88</X><Y>1.75</Y><Z>-1.55</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.48</Y><Z>0.52</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1023">
+      <Properties>
+        <string name="Name">Front_Left_Femur</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.38</X><Y>1.55</Y><Z>-1.6</Z><R00>0.91355</R00><R01>0.40674</R01><R02>0</R02><R10>-0.40674</R10><R11>0.91355</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.38</X><Y>1.55</Y><Z>-1.6</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.38</Y><Z>0.92</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1024">
+      <Properties>
+        <string name="Name">Front_Left_Shin</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.78</X><Y>1.03</Y><Z>-1.67</Z><R00>0.99027</R00><R01>-0.13917</R01><R02>0</R02><R10>0.13917</R10><R11>0.99027</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.78</X><Y>1.03</Y><Z>-1.67</Z></Vector3>
+        <Vector3 name="Size"><X>0.32</X><Y>0.88</Y><Z>0.38</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1025">
+      <Properties>
+        <string name="Name">Front_Left_Foot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.88</X><Y>0.57</Y><Z>-1.73</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.88</X><Y>0.57</Y><Z>-1.73</Z></Vector3>
+        <Vector3 name="Size"><X>0.58</X><Y>0.22</Y><Z>0.42</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1026">
+      <Properties>
+        <string name="Name">Front_Right_Hip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.88</X><Y>1.75</Y><Z>-1.55</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.88</X><Y>1.75</Y><Z>-1.55</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.48</Y><Z>0.52</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1027">
+      <Properties>
+        <string name="Name">Front_Right_Femur</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.38</X><Y>1.55</Y><Z>-1.6</Z><R00>0.91355</R00><R01>-0.40674</R01><R02>0</R02><R10>0.40674</R10><R11>0.91355</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.38</X><Y>1.55</Y><Z>-1.6</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.38</Y><Z>0.92</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1028">
+      <Properties>
+        <string name="Name">Front_Right_Shin</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.78</X><Y>1.03</Y><Z>-1.67</Z><R00>0.99027</R00><R01>0.13917</R01><R02>0</R02><R10>-0.13917</R10><R11>0.99027</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.78</X><Y>1.03</Y><Z>-1.67</Z></Vector3>
+        <Vector3 name="Size"><X>0.32</X><Y>0.88</Y><Z>0.38</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1029">
+      <Properties>
+        <string name="Name">Front_Right_Foot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.88</X><Y>0.57</Y><Z>-1.73</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.88</X><Y>0.57</Y><Z>-1.73</Z></Vector3>
+        <Vector3 name="Size"><X>0.58</X><Y>0.22</Y><Z>0.42</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1030">
+      <Properties>
+        <string name="Name">Middle_Left_Hip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.88</X><Y>1.8</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.88</X><Y>1.8</Y><Z>-0.1</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.48</Y><Z>0.52</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1031">
+      <Properties>
+        <string name="Name">Middle_Left_Femur</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.38</X><Y>1.6</Y><Z>-0.15</Z><R00>0.91355</R00><R01>0.40674</R01><R02>0</R02><R10>-0.40674</R10><R11>0.91355</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.38</X><Y>1.6</Y><Z>-0.15</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.38</Y><Z>0.92</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1032">
+      <Properties>
+        <string name="Name">Middle_Left_Shin</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.78</X><Y>1.08</Y><Z>-0.22</Z><R00>0.99027</R00><R01>-0.13917</R01><R02>0</R02><R10>0.13917</R10><R11>0.99027</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.78</X><Y>1.08</Y><Z>-0.22</Z></Vector3>
+        <Vector3 name="Size"><X>0.32</X><Y>0.88</Y><Z>0.38</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1033">
+      <Properties>
+        <string name="Name">Middle_Left_Foot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.88</X><Y>0.62</Y><Z>-0.28</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.88</X><Y>0.62</Y><Z>-0.28</Z></Vector3>
+        <Vector3 name="Size"><X>0.58</X><Y>0.22</Y><Z>0.42</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1034">
+      <Properties>
+        <string name="Name">Middle_Right_Hip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.88</X><Y>1.8</Y><Z>-0.1</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.88</X><Y>1.8</Y><Z>-0.1</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.48</Y><Z>0.52</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1035">
+      <Properties>
+        <string name="Name">Middle_Right_Femur</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.38</X><Y>1.6</Y><Z>-0.15</Z><R00>0.91355</R00><R01>-0.40674</R01><R02>0</R02><R10>0.40674</R10><R11>0.91355</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.38</X><Y>1.6</Y><Z>-0.15</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.38</Y><Z>0.92</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1036">
+      <Properties>
+        <string name="Name">Middle_Right_Shin</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.78</X><Y>1.08</Y><Z>-0.22</Z><R00>0.99027</R00><R01>0.13917</R01><R02>0</R02><R10>-0.13917</R10><R11>0.99027</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.78</X><Y>1.08</Y><Z>-0.22</Z></Vector3>
+        <Vector3 name="Size"><X>0.32</X><Y>0.88</Y><Z>0.38</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1037">
+      <Properties>
+        <string name="Name">Middle_Right_Foot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.88</X><Y>0.62</Y><Z>-0.28</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.88</X><Y>0.62</Y><Z>-0.28</Z></Vector3>
+        <Vector3 name="Size"><X>0.58</X><Y>0.22</Y><Z>0.42</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1038">
+      <Properties>
+        <string name="Name">Rear_Left_Hip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.88</X><Y>1.75</Y><Z>1.45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.88</X><Y>1.75</Y><Z>1.45</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.48</Y><Z>0.52</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1039">
+      <Properties>
+        <string name="Name">Rear_Left_Femur</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.38</X><Y>1.55</Y><Z>1.4</Z><R00>0.91355</R00><R01>0.40674</R01><R02>0</R02><R10>-0.40674</R10><R11>0.91355</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.38</X><Y>1.55</Y><Z>1.4</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.38</Y><Z>0.92</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1040">
+      <Properties>
+        <string name="Name">Rear_Left_Shin</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.78</X><Y>1.03</Y><Z>1.33</Z><R00>0.99027</R00><R01>-0.13917</R01><R02>0</R02><R10>0.13917</R10><R11>0.99027</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.78</X><Y>1.03</Y><Z>1.33</Z></Vector3>
+        <Vector3 name="Size"><X>0.32</X><Y>0.88</Y><Z>0.38</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1041">
+      <Properties>
+        <string name="Name">Rear_Left_Foot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.88</X><Y>0.57</Y><Z>1.27</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.88</X><Y>0.57</Y><Z>1.27</Z></Vector3>
+        <Vector3 name="Size"><X>0.58</X><Y>0.22</Y><Z>0.42</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1042">
+      <Properties>
+        <string name="Name">Rear_Right_Hip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.88</X><Y>1.75</Y><Z>1.45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.88</X><Y>1.75</Y><Z>1.45</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.48</Y><Z>0.52</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1043">
+      <Properties>
+        <string name="Name">Rear_Right_Femur</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.38</X><Y>1.55</Y><Z>1.4</Z><R00>0.91355</R00><R01>-0.40674</R01><R02>0</R02><R10>0.40674</R10><R11>0.91355</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.38</X><Y>1.55</Y><Z>1.4</Z></Vector3>
+        <Vector3 name="Size"><X>0.48</X><Y>0.38</Y><Z>0.92</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1044">
+      <Properties>
+        <string name="Name">Rear_Right_Shin</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.78</X><Y>1.03</Y><Z>1.33</Z><R00>0.99027</R00><R01>0.13917</R01><R02>0</R02><R10>-0.13917</R10><R11>0.99027</R11><R12>-0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.78</X><Y>1.03</Y><Z>1.33</Z></Vector3>
+        <Vector3 name="Size"><X>0.32</X><Y>0.88</Y><Z>0.38</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1045">
+      <Properties>
+        <string name="Name">Rear_Right_Foot</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.88</X><Y>0.57</Y><Z>1.27</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.88</X><Y>0.57</Y><Z>1.27</Z></Vector3>
+        <Vector3 name="Size"><X>0.58</X><Y>0.22</Y><Z>0.42</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1046">
+      <Properties>
+        <string name="Name">Left_Antenna_Base</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.34</X><Y>2.72</Y><Z>-2.3</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.34</X><Y>2.72</Y><Z>-2.3</Z></Vector3>
+        <Vector3 name="Size"><X>0.18</X><Y>0.18</Y><Z>0.3</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1047">
+      <Properties>
+        <string name="Name">Left_Antenna_Lower</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.52</X><Y>3.12</Y><Z>-2.88</Z><R00>0.95106</R00><R01>0.30226</R01><R02>0.06425</R02><R10>-0.30902</R10><R11>0.93027</R11><R12>0.19774</R12><R20>-0</R20><R21>-0.20791</R21><R22>0.97815</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.52</X><Y>3.12</Y><Z>-2.88</Z></Vector3>
+        <Vector3 name="Size"><X>0.12</X><Y>0.12</Y><Z>1.15</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1048">
+      <Properties>
+        <string name="Name">Left_Antenna_Tip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-0.78</X><Y>3.6</Y><Z>-3.55</Z><R00>0.9205</R00><R01>0.38693</R01><R02>0.05438</R02><R10>-0.39073</R10><R11>0.91155</R11><R12>0.12811</R12><R20>-0</R20><R21>-0.13917</R21><R22>0.99027</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-0.78</X><Y>3.6</Y><Z>-3.55</Z></Vector3>
+        <Vector3 name="Size"><X>0.1</X><Y>0.1</Y><Z>0.95</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1049">
+      <Properties>
+        <string name="Name">Right_Antenna_Base</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.34</X><Y>2.72</Y><Z>-2.3</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.34</X><Y>2.72</Y><Z>-2.3</Z></Vector3>
+        <Vector3 name="Size"><X>0.18</X><Y>0.18</Y><Z>0.3</Z></Vector3>
+        <Color3 name="Color"><R>0.2</R><G>0.075</G><B>0.025</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1050">
+      <Properties>
+        <string name="Name">Right_Antenna_Lower</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.52</X><Y>3.12</Y><Z>-2.88</Z><R00>0.95106</R00><R01>-0.30226</R01><R02>0.06425</R02><R10>0.30902</R10><R11>0.93027</R11><R12>-0.19774</R12><R20>-0</R20><R21>0.20791</R21><R22>0.97815</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.52</X><Y>3.12</Y><Z>-2.88</Z></Vector3>
+        <Vector3 name="Size"><X>0.12</X><Y>0.12</Y><Z>1.15</Z></Vector3>
+        <Color3 name="Color"><R>0.34</R><G>0.13</G><B>0.035</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1051">
+      <Properties>
+        <string name="Name">Right_Antenna_Tip</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>0.78</X><Y>3.6</Y><Z>-3.55</Z><R00>0.9205</R00><R01>-0.38693</R01><R02>0.05438</R02><R10>0.39073</R10><R11>0.91155</R11><R12>-0.12811</R12><R20>-0</R20><R21>0.13917</R21><R22>0.99027</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>0.78</X><Y>3.6</Y><Z>-3.55</Z></Vector3>
+        <Vector3 name="Size"><X>0.1</X><Y>0.1</Y><Z>0.95</Z></Vector3>
+        <Color3 name="Color"><R>0.46</R><G>0.2</G><B>0.045</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1052">
+      <Properties>
+        <string name="Name">Left_Abdomen_Ridge_1</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.28</X><Y>2.15</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.28</X><Y>2.15</Y><Z>0</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.25</Y><Z>0.34</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1053">
+      <Properties>
+        <string name="Name">Left_Abdomen_Ridge_2</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.28</X><Y>2.15</Y><Z>0.75</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.28</X><Y>2.15</Y><Z>0.75</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.25</Y><Z>0.34</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1054">
+      <Properties>
+        <string name="Name">Left_Abdomen_Ridge_3</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>-1.28</X><Y>2.15</Y><Z>1.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>-1.28</X><Y>2.15</Y><Z>1.5</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.25</Y><Z>0.34</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1055">
+      <Properties>
+        <string name="Name">Right_Abdomen_Ridge_1</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.28</X><Y>2.15</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.28</X><Y>2.15</Y><Z>0</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.25</Y><Z>0.34</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1056">
+      <Properties>
+        <string name="Name">Right_Abdomen_Ridge_2</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.28</X><Y>2.15</Y><Z>0.75</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.28</X><Y>2.15</Y><Z>0.75</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.25</Y><Z>0.34</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+
+    <Item class="Part" referent="RBX1057">
+      <Properties>
+        <string name="Name">Right_Abdomen_Ridge_3</string>
+        <bool name="Anchored">true</bool>
+        <bool name="CanCollide">true</bool>
+        <bool name="CanTouch">false</bool>
+        <bool name="CanQuery">true</bool>
+        <CoordinateFrame name="CFrame"><X>1.28</X><Y>2.15</Y><Z>1.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>-0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="Position"><X>1.28</X><Y>2.15</Y><Z>1.5</Z></Vector3>
+        <Vector3 name="Size"><X>0.22</X><Y>0.25</Y><Z>0.34</Z></Vector3>
+        <Color3 name="Color"><R>0.62</R><G>0.3</G><B>0.065</B></Color3>
+        <token name="Material">256</token>
+        <float name="Reflectance">0</float>
+        <float name="Transparency">0</float>
+        <token name="Shape">0</token>
+        <bool name="CastShadow">true</bool>
+        <bool name="Locked">false</bool>
+      </Properties>
+    </Item>
+  </Item>
+</roblox>
