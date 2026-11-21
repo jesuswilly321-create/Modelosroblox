@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?><roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4"><Item class="Workspace" referent="R_WorkspaceWorkspace"><Properties><string name="Name">Workspace</string></Properties><Item class="Part" referent="R_base"><Properties><string name="Name">Baseplate</string><bool name="Anchored">true</bool><CoordinateFrame name="CFrame"><X>0</X><Y>-10</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame><Vector3 name="size"><X>512</X><Y>20</Y><Z>512</Z></Vector3><Color3uint8 name="Color3uint8">4284900966</Color3uint8><token name="TopSurface">3</token></Properties></Item><Item class="SpawnLocation" referent="R_spawn"><Properties><string name="Name">SpawnLocation</string><bool name="Anchored">true</bool><bool name="Neutral">true</bool><CoordinateFrame name="CFrame"><X>0</X><Y>0.6</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame><Vector3 name="size"><X>12</X><Y>1.2</Y><Z>12</Z></Vector3></Properties></Item></Item><Item class="ReplicatedStorage" referent="R_ReplicatedStorageReplicatedStorage"><Properties><string name="Name">ReplicatedStorage</string></Properties><Item class="ModuleScript" referent="R_CancionesModuleScript"><Properties><string name="Name">Canciones</string><ProtectedString name="Source"><![CDATA[-- LISTA DE CANCIONES
+-- Cambia el Id de cada canción por el número de su audio (solo el número, sin "rbxassetid://").
+-- Las canciones con Id = 0 se ignoran. Puedes agregar o quitar líneas.
+-- Categoria puede ser: "Reggaeton", "Regional" o "House".
+return {
+	{Nombre = "3 Pa 3 - Victor Mendivil",   Artista = "Exotic Music",       Categoria = "Regional",  Id = 0},
+	{Nombre = "Alaska",                      Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "Alistate - Victor Mendivil",  Artista = "Exotic Music",       Categoria = "Regional",  Id = 0},
+	{Nombre = "ALUCIN,CALABRIA,WHO...",      Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "Amen - Victor Mendivil",      Artista = "Exotic Music",       Categoria = "Regional",  Id = 0},
+	{Nombre = "10-11-12 FEID",               Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "13-14-15 FEID",               Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "16-17-18 FEID",               Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "18 - Yan Block",              Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "111 x 666",                   Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "444 x Mia",                   Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "Ansiedad x Candy",            Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "Algo magico x Luces de ...",  Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "House Music 1",               Artista = "Exotic Music",       Categoria = "House",     Id = 0},
+}
+]]></ProtectedString></Properties></Item></Item><Item class="ServerScriptService" referent="R_ServerScriptServiceServerScriptService"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Script" referent="R_MusicaServidorScript"><Properties><string name="Name">MusicaServidor</string><token name="RunContext">0</token><ProtectedString name="Source"><![CDATA[-- MUSICA GLOBAL (servidor): cola, reproducción automática, votos para saltar y favoritos
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
+local DSS = game:GetService("DataStoreService")
+
+local Canciones = require(RS:WaitForChild("Canciones"))
+
+local R = Instance.new("Folder")
+R.Name = "MusicaRemotes"
+R.Parent = RS
+local function nuevoEvento(n)
+	local e = Instance.new("RemoteEvent")
+	e.Name = n
+	e.Parent = R
+	return e
+end
+local Estado = nuevoEvento("Estado")
+local Agregar = nuevoEvento("Agregar")
+local Saltar = nuevoEvento("Saltar")
+local Favorito = nuevoEvento("Favorito")
+local Aviso = nuevoEvento("Aviso")
+local Obtener = Instance.new("RemoteFunction")
+Obtener.Name = "Obtener"
+Obtener.Parent = R
+
+local MAX_COLA = 30
+local actual = nil          -- {idx, inicio, dur}
+local cola = {}             -- {idx, por}
+local votos = {}            -- [userId] = true
+local malas = {}            -- canciones que no cargaron
+local duraciones = {}
+local ultimo = nil
+local saltarAhora = false
+local enfriamiento = {}
+
+local porNombre = {}
+for i, c in ipairs(Canciones) do porNombre[c.Nombre] = i end
+
+local function valida(idx)
+	local c = Canciones[idx]
+	return c ~= nil and type(c.Id) == "number" and c.Id ~= 0 and not malas[idx]
+end
+
+local function requeridos()
+	return math.clamp(math.ceil(#Players:GetPlayers() / 2), 1, 10)
+end
+
+local function contarVotos()
+	local n = 0
+	for _, p in ipairs(Players:GetPlayers()) do
+		if votos[p.UserId] then n += 1 end
+	end
+	return n
+end
+
+local function snapshot()
+	local c = {}
+	for _, q in ipairs(cola) do
+		table.insert(c, {idx = q.idx, por = q.por})
+	end
+	local a = nil
+	if actual then a = {idx = actual.idx, inicio = actual.inicio, dur = actual.dur} end
+	return {actual = a, cola = c, votos = contarVotos(), req = requeridos()}
+end
+
+local function difundir()
+	Estado:FireAllClients(snapshot())
+end
+
+local function revisarSaltar()
+	if actual and contarVotos() >= requeridos() then
+		saltarAhora = true
+	end
+end
+
+-- duración real del audio
+local function duracion(idx)
+	if duraciones[idx] then return duraciones[idx] end
+	local c = Canciones[idx]
+	if not valida(idx) then return nil end
+	local s = Instance.new("Sound")
+	s.SoundId = "rbxassetid://" .. c.Id
+	s.Volume = 0
+	s.Parent = SoundService
+	pcall(function() ContentProvider:PreloadAsync({s}) end)
+	local t0 = os.clock()
+	while s.TimeLength <= 0 and os.clock() - t0 < 10 do task.wait(0.2) end
+	local d = s.TimeLength
+	s:Destroy()
+	if d <= 0 then
+		malas[idx] = true
+		warn("[Musica] No se pudo cargar: " .. c.Nombre .. " (revisa el Id y que el audio sea público o tuyo)")
+		return nil
+	end
+	duraciones[idx] = d
+	return d
+end
+
+local function elegirSiguiente()
+	if #cola > 0 then
+		return table.remove(cola, 1)
+	end
+	local opciones = {}
+	for i = 1, #Canciones do
+		if valida(i) and i ~= ultimo then table.insert(opciones, i) end
+	end
+	if #opciones == 0 then
+		if ultimo and valida(ultimo) then return {idx = ultimo, por = "Auto"} end
+		return nil
+	end
+	return {idx = opciones[math.random(#opciones)], por = "Auto"}
+end
+
+task.spawn(function()
+	while true do
+		local sig = elegirSiguiente()
+		if not sig then
+			if actual then actual = nil difundir() end
+			task.wait(2)
+		else
+			local d = duracion(sig.idx)
+			if not d then
+				difundir()
+				task.wait(0.5)
+			else
+				ultimo = sig.idx
+				votos = {}
+				saltarAhora = false
+				actual = {idx = sig.idx, inicio = workspace:GetServerTimeNow(), dur = d}
+				difundir()
+				local t0 = os.clock()
+				while os.clock() - t0 < d and not saltarAhora do
+					task.wait(0.25)
+				end
+				task.wait(0.3)
+			end
+		end
+	end
+end)
+
+Agregar.OnServerEvent:Connect(function(pl, idx)
+	if type(idx) ~= "number" then return end
+	idx = math.floor(idx)
+	local c = Canciones[idx]
+	if not c then return end
+	local ahora = os.clock()
+	if enfriamiento[pl] and ahora - enfriamiento[pl] < 2 then
+		Aviso:FireClient(pl, "Espera un momento")
+		return
+	end
+	if not valida(idx) then
+		Aviso:FireClient(pl, "Esa canción no está disponible")
+		return
+	end
+	if actual and actual.idx == idx then
+		Aviso:FireClient(pl, "Esa canción ya está sonando")
+		return
+	end
+	for _, q in ipairs(cola) do
+		if q.idx == idx then
+			Aviso:FireClient(pl, "Ya está en la cola")
+			return
+		end
+	end
+	if #cola >= MAX_COLA then
+		Aviso:FireClient(pl, "La cola está llena")
+		return
+	end
+	enfriamiento[pl] = ahora
+	table.insert(cola, {idx = idx, por = pl.DisplayName})
+	Aviso:FireClient(pl, "Agregada a la cola: " .. c.Nombre)
+	difundir()
+end)
+
+Saltar.OnServerEvent:Connect(function(pl)
+	if not actual then return end
+	votos[pl.UserId] = true
+	revisarSaltar()
+	difundir()
+end)
+
+-- favoritos (se guardan con DataStore; si no está activo en Studio solo duran la sesión)
+local store
+pcall(function() store = DSS:GetDataStore("FavoritosMusica_v1") end)
+local favoritos = {}
+
+local function cargarFavs(pl)
+	local f = {}
+	if store then
+		local ok, data = pcall(function() return store:GetAsync("u" .. pl.UserId) end)
+		if ok and type(data) == "table" then
+			for _, n in ipairs(data) do f[n] = true end
+		end
+	end
+	favoritos[pl] = f
+end
+
+local function guardarFavs(pl)
+	local f = favoritos[pl]
+	if not store or not f then return end
+	local arr = {}
+	for n in pairs(f) do table.insert(arr, n) end
+	pcall(function() store:SetAsync("u" .. pl.UserId, arr) end)
+end
+
+Favorito.OnServerEvent:Connect(function(pl, nombre)
+	if type(nombre) ~= "string" or not porNombre[nombre] then return end
+	local f = favoritos[pl]
+	if not f then return end
+	if f[nombre] then f[nombre] = nil else f[nombre] = true end
+	task.spawn(guardarFavs, pl)
+end)
+
+Obtener.OnServerInvoke = function(pl)
+	local t0 = os.clock()
+	while not favoritos[pl] and os.clock() - t0 < 6 do task.wait(0.1) end
+	local arr = {}
+	for n in pairs(favoritos[pl] or {}) do table.insert(arr, n) end
+	return {estado = snapshot(), favs = arr}
+end
+
+Players.PlayerAdded:Connect(function(pl) task.spawn(cargarFavs, pl) end)
+for _, pl in ipairs(Players:GetPlayers()) do task.spawn(cargarFavs, pl) end
+
+Players.PlayerRemoving:Connect(function(pl)
+	guardarFavs(pl)
+	votos[pl.UserId] = nil
+	favoritos[pl] = nil
+	enfriamiento[pl] = nil
+	task.defer(function()
+		revisarSaltar()
+		difundir()
+	end)
+end)
+]]></ProtectedString></Properties></Item></Item><Item class="StarterGui" referent="R_StarterGuiStarterGui"><Properties><string name="Name">StarterGui</string></Properties><Item class="ScreenGui" referent="G78"><Properties><string name="Name">OBSMusica</string><bool name="ResetOnSpawn">false</bool><int name="DisplayOrder">50</int><token name="ZIndexBehavior">1</token></Properties><Item class="TextButton" referent="G76"><Properties><string name="Name">Abrir</string><string name="Text">♪</string><UDim2 name="Position"><XS>0</XS><XO>10</XO><YS>0.5</YS><YO>-25</YO></UDim2><UDim2 name="Size"><XS>0</XS><XO>50</XO><YS>0</YS><YO>50</YO></UDim2><Color3 name="BackgroundColor3"><R>0.078431</R><G>0.078431</G><B>0.078431</B></Color3><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="Font">19</token><int name="TextSize">30</int><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G74"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>25</O></UDim></Properties></Item><Item class="UIStroke" referent="G75"><Properties><string name="Name">UIStroke</string><Color3 name="Color"><R>0.431373</R><G>0.431373</G><B>0.431373</B></Color3><float name="Thickness">2</float></Properties></Item></Item><Item class="Frame" referent="G77"><Properties><string name="Name">Panel</string><UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0.5</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.7</XS><XO>0</XO><YS>0.8</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.086275</R><G>0.086275</G><B>0.086275</B></Color3><int name="BorderSizePixel">0</int><Vector2 name="AnchorPoint"><X>0.5</X><Y>0.5</Y></Vector2><bool name="Visible">false</bool></Properties><Item class="UICorner" referent="G1"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>4</O></UDim></Properties></Item><Item class="UIStroke" referent="G2"><Properties><string name="Name">UIStroke</string><Color3 name="Color"><R>0.372549</R><G>0.372549</G><B>0.372549</B></Color3><float name="Thickness">3</float></Properties></Item><Item class="TextLabel" referent="G3"><Properties><string name="Name">Titulo</string><string name="Text">OBS</string><UDim2 name="Position"><XS>0.04</XS><XO>0</XO><YS>0.05</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.22</XS><XO>0</XO><YS>0.2</YS><YO>0</YO></UDim2><token name="Font">26</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="TextXAlignment">0</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item><Item class="TextButton" referent="G4"><Properties><string name="Name">Cerrar</string><string name="Text">X</string><UDim2 name="Position"><XS>0.915</XS><XO>0</XO><YS>0.05</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.07</XS><XO>0</XO><YS>0.14</YS><YO>0</YO></UDim2><token name="Font">26</token><Color3 name="TextColor3"><R>0.784314</R><G>0.098039</G><B>0.098039</B></Color3><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int><float name="BackgroundTransparency">1</float></Properties></Item><Item class="Frame" referent="G8"><Properties><string name="Name">CajaBusqueda</string><UDim2 name="Position"><XS>0.36</XS><XO>0</XO><YS>0.075</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.25</XS><XO>0</XO><YS>0.095</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.156863</R><G>0.156863</G><B>0.156863</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G5"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>16</O></UDim></Properties></Item><Item class="TextBox" referent="G7"><Properties><string name="Name">Busqueda</string><string name="Text"></string><string name="PlaceholderText">Search...</string><Color3 name="PlaceholderColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="Font">19</token><bool name="TextScaled">true</bool><token name="TextXAlignment">0</token><bool name="ClearTextOnFocus">false</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int><UDim2 name="Position"><XS>0.08</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.9</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3></Properties><Item class="UIPadding" referent="G6"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.12</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.12</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.12</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.12</S><O>0</O></UDim></Properties></Item></Item></Item><Item class="TextButton" referent="G11"><Properties><string name="Name">BtnSaltar</string><string name="Text">Saltar  0/10</string><UDim2 name="Position"><XS>0.66</XS><XO>0</XO><YS>0.07</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.18</XS><XO>0</XO><YS>0.1</YS><YO>0</YO></UDim2><token name="Font">26</token><Color3 name="TextColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><Color3 name="BackgroundColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G9"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>16</O></UDim></Properties></Item><Item class="UIPadding" referent="G10"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.14</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.14</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.14</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.14</S><O>0</O></UDim></Properties></Item></Item><Item class="TextButton" referent="G14"><Properties><string name="Name">TabReproductor</string><string name="Text">♪ Reproductor</string><UDim2 name="Position"><XS>0.02</XS><XO>0</XO><YS>0.27</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.21</XS><XO>0</XO><YS>0.118</YS><YO>0</YO></UDim2><token name="Font">26</token><Color3 name="TextColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><Color3 name="BackgroundColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G12"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>20</O></UDim></Properties></Item><Item class="UIPadding" referent="G13"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.17</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.17</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.17</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.17</S><O>0</O></UDim></Properties></Item></Item><Item class="TextButton" referent="G17"><Properties><string name="Name">TabPlaylist</string><string name="Text">☰ Playlist</string><UDim2 name="Position"><XS>0.02</XS><XO>0</XO><YS>0.44</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.21</XS><XO>0</XO><YS>0.118</YS><YO>0</YO></UDim2><token name="Font">26</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><Color3 name="BackgroundColor3"><R>0.431373</R><G>0.431373</G><B>0.431373</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G15"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>20</O></UDim></Properties></Item><Item class="UIPadding" referent="G16"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.17</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.17</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.17</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.17</S><O>0</O></UDim></Properties></Item></Item><Item class="TextButton" referent="G20"><Properties><string name="Name">TabFavorite</string><string name="Text">♥ Favorite</string><UDim2 name="Position"><XS>0.02</XS><XO>0</XO><YS>0.615</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.21</XS><XO>0</XO><YS>0.118</YS><YO>0</YO></UDim2><token name="Font">26</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><Color3 name="BackgroundColor3"><R>0.431373</R><G>0.431373</G><B>0.431373</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G18"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>20</O></UDim></Properties></Item><Item class="UIPadding" referent="G19"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.17</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.17</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.17</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.17</S><O>0</O></UDim></Properties></Item></Item><Item class="TextLabel" referent="G21"><Properties><string name="Name">VolLabel</string><string name="Text">Volume</string><UDim2 name="Position"><XS>0.07</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.1</XS><XO>0</XO><YS>0.06</YS><YO>0</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="TextXAlignment">0</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item><Item class="TextLabel" referent="G22"><Properties><string name="Name">VolPct</string><string name="Text">100%</string><UDim2 name="Position"><XS>0.17</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.06</XS><XO>0</XO><YS>0.06</YS><YO>0</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><token name="TextXAlignment">1</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item><Item class="TextButton" referent="G28"><Properties><string name="Name">VolPista</string><string name="Text"></string><bool name="AutoButtonColor">false</bool><UDim2 name="Position"><XS>0.02</XS><XO>0</XO><YS>0.915</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.21</XS><XO>0</XO><YS>0.04</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.176471</R><G>0.176471</G><B>0.176471</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G23"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>10</O></UDim></Properties></Item><Item class="Frame" referent="G25"><Properties><string name="Name">VolRelleno</string><UDim2 name="Position"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G24"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>10</O></UDim></Properties></Item></Item><Item class="Frame" referent="G27"><Properties><string name="Name">VolPerilla</string><UDim2 name="Position"><XS>1</XS><XO>0</XO><YS>0.5</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0</XS><XO>18</XO><YS>0</YS><YO>18</YO></UDim2><Color3 name="BackgroundColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><int name="BorderSizePixel">0</int><Vector2 name="AnchorPoint"><X>0.5</X><Y>0.5</Y></Vector2></Properties><Item class="UICorner" referent="G26"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>9</O></UDim></Properties></Item></Item></Item><Item class="TextButton" referent="G31"><Properties><string name="Name">CatTodos</string><string name="Text">♪ Todos</string><UDim2 name="Position"><XS>0.272</XS><XO>0</XO><YS>0.2</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.087</XS><XO>0</XO><YS>0.05</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><Color3 name="BackgroundColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G29"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item><Item class="UIPadding" referent="G30"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.14</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.14</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.14</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.14</S><O>0</O></UDim></Properties></Item></Item><Item class="TextButton" referent="G34"><Properties><string name="Name">CatReggaeton</string><string name="Text">♪ Reggaeton</string><UDim2 name="Position"><XS>0.381</XS><XO>0</XO><YS>0.2</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.087</XS><XO>0</XO><YS>0.05</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><Color3 name="BackgroundColor3"><R>0.431373</R><G>0.431373</G><B>0.431373</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G32"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item><Item class="UIPadding" referent="G33"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.14</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.14</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.14</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.14</S><O>0</O></UDim></Properties></Item></Item><Item class="TextButton" referent="G37"><Properties><string name="Name">CatRegional</string><string name="Text">♪ Regional</string><UDim2 name="Position"><XS>0.49</XS><XO>0</XO><YS>0.2</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.087</XS><XO>0</XO><YS>0.05</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><Color3 name="BackgroundColor3"><R>0.431373</R><G>0.431373</G><B>0.431373</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G35"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item><Item class="UIPadding" referent="G36"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.14</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.14</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.14</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.14</S><O>0</O></UDim></Properties></Item></Item><Item class="TextButton" referent="G40"><Properties><string name="Name">CatHouse</string><string name="Text">♪ House</string><UDim2 name="Position"><XS>0.599</XS><XO>0</XO><YS>0.2</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.087</XS><XO>0</XO><YS>0.05</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><Color3 name="BackgroundColor3"><R>0.431373</R><G>0.431373</G><B>0.431373</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G38"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item><Item class="UIPadding" referent="G39"><Properties><string name="Name">UIPadding</string><UDim name="PaddingTop"><S>0.14</S><O>0</O></UDim><UDim name="PaddingBottom"><S>0.14</S><O>0</O></UDim><UDim name="PaddingLeft"><S>0.14</S><O>0</O></UDim><UDim name="PaddingRight"><S>0.14</S><O>0</O></UDim></Properties></Item></Item><Item class="ScrollingFrame" referent="G42"><Properties><string name="Name">Lista</string><UDim2 name="Position"><XS>0.28</XS><XO>0</XO><YS>0.27</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.415</XS><XO>0</XO><YS>0.69</YS><YO>0</YO></UDim2><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int><int name="ScrollBarThickness">4</int><UDim2 name="CanvasSize"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><token name="AutomaticSize">0</token><token name="AutomaticCanvasSize">2</token></Properties><Item class="UIListLayout" referent="G41"><Properties><string name="Name">UIListLayout</string><UDim name="Padding"><S>0</S><O>6</O></UDim><token name="SortOrder">2</token></Properties></Item></Item><Item class="Frame" referent="G52"><Properties><string name="Name">Portada</string><UDim2 name="Position"><XS>0.717</XS><XO>0</XO><YS>0.22</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.27</XS><XO>0</XO><YS>0.47</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.647059</R><G>0.647059</G><B>0.647059</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G43"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>14</O></UDim></Properties></Item><Item class="UIStroke" referent="G44"><Properties><string name="Name">UIStroke</string><Color3 name="Color"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><float name="Thickness">4</float></Properties></Item><Item class="Frame" referent="G46"><Properties><string name="Name">NotaCabeza1</string><UDim2 name="Position"><XS>0.28</XS><XO>0</XO><YS>0.62</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.22</XS><XO>0</XO><YS>0.14</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G45"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>100</O></UDim></Properties></Item></Item><Item class="Frame" referent="G48"><Properties><string name="Name">NotaCabeza2</string><UDim2 name="Position"><XS>0.62</XS><XO>0</XO><YS>0.55</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.22</XS><XO>0</XO><YS>0.14</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G47"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>100</O></UDim></Properties></Item></Item><Item class="Frame" referent="G49"><Properties><string name="Name">NotaPlica1</string><UDim2 name="Position"><XS>0.46</XS><XO>0</XO><YS>0.22</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.045</XS><XO>0</XO><YS>0.5</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><int name="BorderSizePixel">0</int></Properties></Item><Item class="Frame" referent="G50"><Properties><string name="Name">NotaPlica2</string><UDim2 name="Position"><XS>0.8</XS><XO>0</XO><YS>0.15</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.045</XS><XO>0</XO><YS>0.5</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><int name="BorderSizePixel">0</int></Properties></Item><Item class="Frame" referent="G51"><Properties><string name="Name">NotaBarra</string><UDim2 name="Position"><XS>0.46</XS><XO>0</XO><YS>0.2</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.385</XS><XO>0</XO><YS>0.09</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><int name="BorderSizePixel">0</int></Properties></Item></Item><Item class="TextLabel" referent="G53"><Properties><string name="Name">NombreActual</string><string name="Text">Sin música</string><UDim2 name="Position"><XS>0.7</XS><XO>0</XO><YS>0.7</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.3</XS><XO>0</XO><YS>0.085</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="TextXAlignment">2</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item><Item class="TextLabel" referent="G54"><Properties><string name="Name">ArtistaActual</string><string name="Text"></string><UDim2 name="Position"><XS>0.7</XS><XO>0</XO><YS>0.79</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.3</XS><XO>0</XO><YS>0.06</YS><YO>0</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="TextXAlignment">2</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item><Item class="Frame" referent="G58"><Properties><string name="Name">ProgFondo</string><UDim2 name="Position"><XS>0.74</XS><XO>0</XO><YS>0.87</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.21</XS><XO>0</XO><YS>0.03</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>0.137255</R><G>0.137255</G><B>0.137255</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G55"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item><Item class="Frame" referent="G57"><Properties><string name="Name">ProgBarra</string><UDim2 name="Position"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2><Color3 name="BackgroundColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G56"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item></Item></Item><Item class="TextLabel" referent="G59"><Properties><string name="Name">TiempoIzq</string><string name="Text">0:00</string><UDim2 name="Position"><XS>0.74</XS><XO>0</XO><YS>0.905</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.06</XS><XO>0</XO><YS>0.045</YS><YO>0</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><token name="TextXAlignment">0</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item><Item class="TextLabel" referent="G60"><Properties><string name="Name">TiempoDer</string><string name="Text">0:00</string><UDim2 name="Position"><XS>0.89</XS><XO>0</XO><YS>0.905</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.06</XS><XO>0</XO><YS>0.045</YS><YO>0</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><token name="TextXAlignment">1</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int></Properties></Item></Item><Item class="Frame" referent="G69"><Properties><string name="Name">FilaPlantilla</string><UDim2 name="Position"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>1</XS><XO>-8</XO><YS>0</YS><YO>62</YO></UDim2><Color3 name="BackgroundColor3"><R>0.133333</R><G>0.133333</G><B>0.133333</B></Color3><int name="BorderSizePixel">0</int><bool name="Visible">false</bool></Properties><Item class="UICorner" referent="G61"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>8</O></UDim></Properties></Item><Item class="UIStroke" referent="G62"><Properties><string name="Name">UIStroke</string><Color3 name="Color"><R>0.215686</R><G>0.215686</G><B>0.215686</B></Color3><float name="Thickness">1</float></Properties></Item><Item class="TextButton" referent="G63"><Properties><string name="Name">Boton</string><string name="Text"></string><float name="BackgroundTransparency">1</float><UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2><UDim2 name="Position"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><int name="ZIndex">1</int><int name="BorderSizePixel">0</int><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3></Properties></Item><Item class="TextLabel" referent="G65"><Properties><string name="Name">Titulo</string><string name="Text">Titulo</string><UDim2 name="Position"><XS>0.04</XS><XO>0</XO><YS>0.08</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.72</XS><XO>0</XO><YS>0.5</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="TextXAlignment">0</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int><int name="ZIndex">2</int></Properties><Item class="UITextSizeConstraint" referent="G64"><Properties><string name="Name">UITextSizeConstraint</string><float name="MaxTextSize">22</float><float name="MinTextSize">8</float></Properties></Item></Item><Item class="TextLabel" referent="G67"><Properties><string name="Name">Artista</string><string name="Text">Artista</string><UDim2 name="Position"><XS>0.04</XS><XO>0</XO><YS>0.58</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.72</XS><XO>0</XO><YS>0.32</YS><YO>0</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><token name="TextXAlignment">0</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int><int name="ZIndex">2</int></Properties><Item class="UITextSizeConstraint" referent="G66"><Properties><string name="Name">UITextSizeConstraint</string><float name="MaxTextSize">16</float><float name="MinTextSize">8</float></Properties></Item></Item><Item class="TextButton" referent="G68"><Properties><string name="Name">Corazon</string><string name="Text">♥</string><UDim2 name="Position"><XS>0.82</XS><XO>0</XO><YS>0.12</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>0.14</XS><XO>0</XO><YS>0.76</YS><YO>0</YO></UDim2><token name="Font">19</token><Color3 name="TextColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><Color3 name="BackgroundColor3"><R>0.000000</R><G>0.000000</G><B>0.000000</B></Color3><bool name="TextScaled">true</bool><bool name="AutoButtonColor">false</bool><int name="BorderSizePixel">0</int><float name="BackgroundTransparency">1</float><int name="ZIndex">3</int></Properties></Item></Item><Item class="TextLabel" referent="G71"><Properties><string name="Name">MensajeVacio</string><string name="Text"></string><UDim2 name="Position"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>1</XS><XO>-8</XO><YS>0</YS><YO>70</YO></UDim2><token name="Font">17</token><Color3 name="TextColor3"><R>0.745098</R><G>0.745098</G><B>0.745098</B></Color3><token name="TextXAlignment">2</token><bool name="TextScaled">true</bool><float name="BackgroundTransparency">1</float><int name="BorderSizePixel">0</int><bool name="Visible">false</bool></Properties><Item class="UITextSizeConstraint" referent="G70"><Properties><string name="Name">UITextSizeConstraint</string><float name="MaxTextSize">18</float><float name="MinTextSize">8</float></Properties></Item></Item><Item class="TextLabel" referent="G73"><Properties><string name="Name">Aviso</string><string name="Text"></string><UDim2 name="Position"><XS>0.5</XS><XO>0</XO><YS>0</YS><YO>14</YO></UDim2><UDim2 name="Size"><XS>0</XS><XO>320</XO><YS>0</YS><YO>38</YO></UDim2><Color3 name="BackgroundColor3"><R>0.078431</R><G>0.078431</G><B>0.078431</B></Color3><Color3 name="TextColor3"><R>1.000000</R><G>1.000000</G><B>1.000000</B></Color3><token name="Font">19</token><int name="TextSize">16</int><bool name="Visible">false</bool><Vector2 name="AnchorPoint"><X>0.5</X><Y>0</Y></Vector2><int name="BorderSizePixel">0</int></Properties><Item class="UICorner" referent="G72"><Properties><string name="Name">UICorner</string><UDim name="CornerRadius"><S>0</S><O>10</O></UDim></Properties></Item></Item><Item class="LocalScript" referent="G_ls"><Properties><string name="Name">MusicaCliente</string><ProtectedString name="Source"><![CDATA[-- MUSICA GLOBAL (cliente): lógica del panel OBS. La interfaz ya está armada en este ScreenGui.
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local ContentProvider = game:GetService("ContentProvider")
+
+local gui = script.Parent
+local R = RS:WaitForChild("MusicaRemotes")
+local Canciones = require(RS:WaitForChild("Canciones"))
+
+local BLANCO = Color3.fromRGB(255, 255, 255)
+local NEGRO = Color3.fromRGB(0, 0, 0)
+local GRIS = Color3.fromRGB(110, 110, 110)
+local GRIS_TXT = Color3.fromRGB(190, 190, 190)
+local ROSA = Color3.fromRGB(255, 90, 130)
+
+-- referencias a la interfaz
+local abrir = gui:WaitForChild("Abrir")
+local panel = gui:WaitForChild("Panel")
+local plantilla = gui:WaitForChild("FilaPlantilla")
+local plantillaVacio = gui:WaitForChild("MensajeVacio")
+local toast = gui:WaitForChild("Aviso")
+
+local cerrar = panel:WaitForChild("Cerrar")
+local busq = panel:WaitForChild("CajaBusqueda"):WaitForChild("Busqueda")
+local btnSaltar = panel:WaitForChild("BtnSaltar")
+local lista = panel:WaitForChild("Lista")
+local volPct = panel:WaitForChild("VolPct")
+local pista = panel:WaitForChild("VolPista")
+local relleno_vol = pista:WaitForChild("VolRelleno")
+local perilla = pista:WaitForChild("VolPerilla")
+local nombreActual = panel:WaitForChild("NombreActual")
+local artistaActual = panel:WaitForChild("ArtistaActual")
+local barraProg = panel:WaitForChild("ProgFondo"):WaitForChild("ProgBarra")
+local tIzq = panel:WaitForChild("TiempoIzq")
+local tDer = panel:WaitForChild("TiempoDer")
+
+local botonesPestana = {
+	Reproductor = panel:WaitForChild("TabReproductor"),
+	Playlist = panel:WaitForChild("TabPlaylist"),
+	Favorite = panel:WaitForChild("TabFavorite"),
+}
+local botonesCat = {
+	Todos = panel:WaitForChild("CatTodos"),
+	Reggaeton = panel:WaitForChild("CatReggaeton"),
+	Regional = panel:WaitForChild("CatRegional"),
+	House = panel:WaitForChild("CatHouse"),
+}
+
+-- sonido local (cada jugador controla su volumen)
+local sonido = Instance.new("Sound")
+sonido.Name = "MusicaGlobal"
+sonido.Looped = false
+sonido.Volume = 1
+sonido.Parent = SoundService
+
+local pestanaActual = "Reproductor"
+local categoria = "Todos"
+local estado = {cola = {}, votos = 0, req = 1}
+local actual = nil
+local favs = {}
+local votadoPara = nil
+local render
+
+-- aviso emergente
+local toastId = 0
+local function aviso(msg)
+	toastId += 1
+	local mi = toastId
+	toast.Text = msg
+	toast.Visible = true
+	task.delay(2.5, function()
+		if toastId == mi then toast.Visible = false end
+	end)
+end
+
+-- volumen
+local function fijarVolumen(v)
+	v = math.clamp(v, 0, 1)
+	sonido.Volume = v
+	relleno_vol.Size = UDim2.new(v, 0, 1, 0)
+	perilla.Position = UDim2.new(v, 0, 0.5, 0)
+	volPct.Text = math.floor(v * 100 + 0.5) .. "%"
+end
+local arrastrando = false
+local function moverVol(pos)
+	fijarVolumen((pos.X - pista.AbsolutePosition.X) / pista.AbsoluteSize.X)
+end
+pista.InputBegan:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+		arrastrando = true
+		moverVol(i.Position)
+	end
+end)
+UserInputService.InputChanged:Connect(function(i)
+	if arrastrando and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+		moverVol(i.Position)
+	end
+end)
+UserInputService.InputEnded:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+		arrastrando = false
+	end
+end)
+
+local function fmt(s)
+	s = math.max(0, math.floor(s))
+	return string.format("%d:%02d", s // 60, s % 60)
+end
+
+local ordenados = {}
+for i = 1, #Canciones do table.insert(ordenados, i) end
+table.sort(ordenados, function(a, b)
+	return string.lower(Canciones[a].Nombre) < string.lower(Canciones[b].Nombre)
+end)
+
+local function limpiarLista()
+	for _, h in ipairs(lista:GetChildren()) do
+		if h:IsA("GuiObject") then h:Destroy() end
+	end
+end
+
+local function fila(orden, titulo, artista, nombreFav, alClick)
+	local f = plantilla:Clone()
+	f.Name = "Fila"
+	f.LayoutOrder = orden
+	f.Visible = true
+	f.Titulo.Text = titulo
+	f.Artista.Text = artista or ""
+	local h = f.Corazon
+	if nombreFav then
+		h.TextColor3 = favs[nombreFav] and ROSA or GRIS_TXT
+		h.MouseButton1Click:Connect(function()
+			favs[nombreFav] = not favs[nombreFav] or nil
+			h.TextColor3 = favs[nombreFav] and ROSA or GRIS_TXT
+			R.Favorito:FireServer(nombreFav)
+			if pestanaActual == "Favorite" then task.defer(render) end
+		end)
+	else
+		h.Visible = false
+	end
+	if alClick then f.Boton.MouseButton1Click:Connect(alClick) end
+	f.Parent = lista
+end
+
+local function mensajeVacio(txt)
+	local m = plantillaVacio:Clone()
+	m.Name = "Vacio"
+	m.Text = txt
+	m.Visible = true
+	m.Parent = lista
+end
+
+render = function()
+	limpiarLista()
+	local q = string.lower(busq.Text or "")
+	local function pasa(c)
+		if categoria ~= "Todos" and c.Categoria ~= categoria then return false end
+		if q ~= "" then
+			local n = string.lower(c.Nombre)
+			local ar = string.lower(c.Artista or "")
+			if not string.find(n, q, 1, true) and not string.find(ar, q, 1, true) then return false end
+		end
+		return true
+	end
+	if pestanaActual == "Reproductor" then
+		for orden, i in ipairs(ordenados) do
+			local c = Canciones[i]
+			if pasa(c) then
+				fila(orden, c.Nombre, c.Artista, c.Nombre, function() R.Agregar:FireServer(i) end)
+			end
+		end
+	elseif pestanaActual == "Playlist" then
+		local n = 0
+		for pos, item in ipairs(estado.cola) do
+			local c = Canciones[item.idx]
+			if c and pasa(c) then
+				n += 1
+				fila(pos, "#" .. pos .. "  " .. c.Nombre, c.Artista, nil, nil)
+			end
+		end
+		if n == 0 then mensajeVacio("La cola está vacía. Toca una canción en Reproductor para agregarla.") end
+	else
+		local n = 0
+		for orden, i in ipairs(ordenados) do
+			local c = Canciones[i]
+			if favs[c.Nombre] and pasa(c) then
+				n += 1
+				fila(orden, c.Nombre, c.Artista, c.Nombre, function() R.Agregar:FireServer(i) end)
+			end
+		end
+		if n == 0 then mensajeVacio("Aún no tienes favoritas. Toca el corazón de una canción.") end
+	end
+end
+
+local function pintarBotones()
+	for nombre, b in pairs(botonesPestana) do
+		local activo = nombre == pestanaActual
+		b.BackgroundColor3 = activo and BLANCO or GRIS
+		b.TextColor3 = activo and NEGRO or BLANCO
+	end
+	for nombre, b in pairs(botonesCat) do
+		local activo = nombre == categoria
+		b.BackgroundColor3 = activo and BLANCO or GRIS
+		b.TextColor3 = activo and NEGRO or BLANCO
+	end
+end
+
+for nombre, b in pairs(botonesPestana) do
+	b.MouseButton1Click:Connect(function()
+		pestanaActual = nombre
+		pintarBotones()
+		render()
+	end)
+end
+for nombre, b in pairs(botonesCat) do
+	b.MouseButton1Click:Connect(function()
+		categoria = nombre
+		pintarBotones()
+		render()
+	end)
+end
+busq:GetPropertyChangedSignal("Text"):Connect(function() render() end)
+
+btnSaltar.MouseButton1Click:Connect(function()
+	if not actual then aviso("No hay música sonando") return end
+	if votadoPara == actual.inicio then aviso("Ya votaste para saltar") return end
+	votadoPara = actual.inicio
+	R.Saltar:FireServer()
+end)
+
+-- reproducir sincronizado con el servidor
+local function reproducir(mia)
+	local c = Canciones[mia.idx]
+	if not c then return end
+	sonido:Stop()
+	sonido.SoundId = "rbxassetid://" .. c.Id
+	task.spawn(function()
+		pcall(function() ContentProvider:PreloadAsync({sonido}) end)
+		if actual ~= mia then return end
+		local t0 = os.clock()
+		while sonido.TimeLength <= 0 and os.clock() - t0 < 8 do task.wait(0.1) end
+		if actual ~= mia then return end
+		local pos = workspace:GetServerTimeNow() - mia.inicio
+		if sonido.TimeLength > 0 then
+			sonido.TimePosition = math.clamp(pos, 0, math.max(0, sonido.TimeLength - 0.2))
+		end
+		sonido:Play()
+	end)
+end
+
+local function aplicar(e)
+	estado = e
+	local nuevo = e.actual
+	if nuevo then
+		if not actual or actual.inicio ~= nuevo.inicio then
+			actual = nuevo
+			reproducir(actual)
+			local c = Canciones[actual.idx]
+			nombreActual.Text = c and c.Nombre or "..."
+			artistaActual.Text = c and (c.Artista or "") or ""
+		end
+	else
+		actual = nil
+		sonido:Stop()
+		nombreActual.Text = "Sin música"
+		artistaActual.Text = ""
+	end
+	btnSaltar.Text = "Saltar  " .. estado.votos .. "/" .. estado.req
+	if pestanaActual == "Playlist" then render() end
+end
+
+R:WaitForChild("Estado").OnClientEvent:Connect(aplicar)
+R:WaitForChild("Aviso").OnClientEvent:Connect(aviso)
+
+-- progreso + corrección de desfase
+local ultimaCorreccion = 0
+RunService.Heartbeat:Connect(function()
+	if actual then
+		local pos = math.clamp(workspace:GetServerTimeNow() - actual.inicio, 0, actual.dur)
+		barraProg.Size = UDim2.new(pos / actual.dur, 0, 1, 0)
+		tIzq.Text = fmt(pos)
+		tDer.Text = fmt(actual.dur)
+		if sonido.IsPlaying and os.clock() - ultimaCorreccion > 8 then
+			ultimaCorreccion = os.clock()
+			if math.abs(sonido.TimePosition - pos) > 2 then sonido.TimePosition = pos end
+		end
+	else
+		barraProg.Size = UDim2.new(0, 0, 1, 0)
+		tIzq.Text = "0:00"
+		tDer.Text = "0:00"
+	end
+end)
+
+abrir.MouseButton1Click:Connect(function()
+	panel.Visible = not panel.Visible
+	if panel.Visible then render() end
+end)
+cerrar.MouseButton1Click:Connect(function() panel.Visible = false end)
+
+pintarBotones()
+fijarVolumen(1)
+render()
+
+task.spawn(function()
+	local datos = R:WaitForChild("Obtener"):InvokeServer()
+	if datos then
+		for _, n in ipairs(datos.favs or {}) do favs[n] = true end
+		aplicar(datos.estado)
+		render()
+	end
+end)
+]]></ProtectedString></Properties></Item></Item></Item></roblox>
