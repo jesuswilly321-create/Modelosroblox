@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="utf-8"?><roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4"><Item class="Workspace" referent="R_WorkspaceWorkspace"><Properties><string name="Name">Workspace</string></Properties><Item class="Part" referent="R_base"><Properties><string name="Name">Baseplate</string><bool name="Anchored">true</bool><CoordinateFrame name="CFrame"><X>0</X><Y>-10</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame><Vector3 name="size"><X>512</X><Y>20</Y><Z>512</Z></Vector3><Color3uint8 name="Color3uint8">4284900966</Color3uint8><token name="TopSurface">3</token></Properties></Item><Item class="SpawnLocation" referent="R_spawn"><Properties><string name="Name">SpawnLocation</string><bool name="Anchored">true</bool><bool name="Neutral">true</bool><CoordinateFrame name="CFrame"><X>0</X><Y>0.6</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame><Vector3 name="size"><X>12</X><Y>1.2</Y><Z>12</Z></Vector3></Properties></Item></Item><Item class="ReplicatedStorage" referent="R_ReplicatedStorageReplicatedStorage"><Properties><string name="Name">ReplicatedStorage</string></Properties><Item class="ModuleScript" referent="R_CancionesModuleScript"><Properties><string name="Name">Canciones</string><ProtectedString name="Source"><![CDATA[-- LISTA DE CANCIONES
+-- Cambia el Id de cada canción por el número de su audio (solo el número, sin "rbxassetid://").
+-- Las canciones con Id = 0 se ignoran. Puedes agregar o quitar líneas.
+-- Categoria puede ser: "Reggaeton", "Regional" o "House".
+return {
+	{Nombre = "3 Pa 3 - Victor Mendivil",   Artista = "Exotic Music",       Categoria = "Regional",  Id = 0},
+	{Nombre = "Alaska",                      Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "Alistate - Victor Mendivil",  Artista = "Exotic Music",       Categoria = "Regional",  Id = 0},
+	{Nombre = "ALUCIN,CALABRIA,WHO...",      Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "Amen - Victor Mendivil",      Artista = "Exotic Music",       Categoria = "Regional",  Id = 0},
+	{Nombre = "10-11-12 FEID",               Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "13-14-15 FEID",               Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "16-17-18 FEID",               Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "18 - Yan Block",              Artista = "Exotic Music",       Categoria = "Reggaeton", Id = 0},
+	{Nombre = "111 x 666",                   Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "444 x Mia",                   Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "Ansiedad x Candy",            Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "Algo magico x Luces de ...",  Artista = "Reclusorio Oriente", Categoria = "House",     Id = 0},
+	{Nombre = "House Music 1",               Artista = "Exotic Music",       Categoria = "House",     Id = 0},
+}
+]]></ProtectedString></Properties></Item></Item><Item class="ServerScriptService" referent="R_ServerScriptServiceServerScriptService"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Script" referent="R_MusicaServidorScript"><Properties><string name="Name">MusicaServidor</string><token name="RunContext">0</token><ProtectedString name="Source"><![CDATA[-- MUSICA GLOBAL (servidor): cola, reproducción automática, votos para saltar y favoritos
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
+local DSS = game:GetService("DataStoreService")
+
+local Canciones = require(RS:WaitForChild("Canciones"))
+
+local R = Instance.new("Folder")
+R.Name = "MusicaRemotes"
+R.Parent = RS
+local function nuevoEvento(n)
+	local e = Instance.new("RemoteEvent")
+	e.Name = n
+	e.Parent = R
+	return e
+end
+local Estado = nuevoEvento("Estado")
+local Agregar = nuevoEvento("Agregar")
+local Saltar = nuevoEvento("Saltar")
+local Favorito = nuevoEvento("Favorito")
+local Aviso = nuevoEvento("Aviso")
+local Obtener = Instance.new("RemoteFunction")
+Obtener.Name = "Obtener"
+Obtener.Parent = R
+
+local MAX_COLA = 30
+local actual = nil          -- {idx, inicio, dur}
+local cola = {}             -- {idx, por}
+local votos = {}            -- [userId] = true
+local malas = {}            -- canciones que no cargaron
+local duraciones = {}
+local ultimo = nil
+local saltarAhora = false
+local enfriamiento = {}
+
+local porNombre = {}
+for i, c in ipairs(Canciones) do porNombre[c.Nombre] = i end
+
+local function valida(idx)
+	local c = Canciones[idx]
+	return c ~= nil and type(c.Id) == "number" and c.Id ~= 0 and not malas[idx]
+end
+
+local function requeridos()
+	return math.clamp(math.ceil(#Players:GetPlayers() / 2), 1, 10)
+end
+
+local function contarVotos()
+	local n = 0
+	for _, p in ipairs(Players:GetPlayers()) do
+		if votos[p.UserId] then n += 1 end
+	end
+	return n
+end
+
+local function snapshot()
+	local c = {}
+	for _, q in ipairs(cola) do
+		table.insert(c, {idx = q.idx, por = q.por})
+	end
+	local a = nil
+	if actual then a = {idx = actual.idx, inicio = actual.inicio, dur = actual.dur} end
+	return {actual = a, cola = c, votos = contarVotos(), req = requeridos()}
+end
+
+local function difundir()
+	Estado:FireAllClients(snapshot())
+end
+
+local function revisarSaltar()
+	if actual and contarVotos() >= requeridos() then
+		saltarAhora = true
+	end
+end
+
+-- duración real del audio
+local function duracion(idx)
+	if duraciones[idx] then return duraciones[idx] end
+	local c = Canciones[idx]
+	if not valida(idx) then return nil end
+	local s = Instance.new("Sound")
+	s.SoundId = "rbxassetid://" .. c.Id
+	s.Volume = 0
+	s.Parent = SoundService
+	pcall(function() ContentProvider:PreloadAsync({s}) end)
+	local t0 = os.clock()
+	while s.TimeLength <= 0 and os.clock() - t0 < 10 do task.wait(0.2) end
+	local d = s.TimeLength
+	s:Destroy()
+	if d <= 0 then
+		malas[idx] = true
+		warn("[Musica] No se pudo cargar: " .. c.Nombre .. " (revisa el Id y que el audio sea público o tuyo)")
+		return nil
+	end
+	duraciones[idx] = d
+	return d
+end
+
+local function elegirSiguiente()
+	if #cola > 0 then
+		return table.remove(cola, 1)
+	end
+	local opciones = {}
+	for i = 1, #Canciones do
+		if valida(i) and i ~= ultimo then table.insert(opciones, i) end
+	end
+	if #opciones == 0 then
+		if ultimo and valida(ultimo) then return {idx = ultimo, por = "Auto"} end
+		return nil
+	end
+	return {idx = opciones[math.random(#opciones)], por = "Auto"}
+end
+
+task.spawn(function()
+	while true do
+		local sig = elegirSiguiente()
+		if not sig then
+			if actual then actual = nil difundir() end
+			task.wait(2)
+		else
+			local d = duracion(sig.idx)
+			if not d then
+				difundir()
+				task.wait(0.5)
+			else
+				ultimo = sig.idx
+				votos = {}
+				saltarAhora = false
+				actual = {idx = sig.idx, inicio = workspace:GetServerTimeNow(), dur = d}
+				difundir()
+				local t0 = os.clock()
+				while os.clock() - t0 < d and not saltarAhora do
+					task.wait(0.25)
+				end
+				task.wait(0.3)
+			end
+		end
+	end
+end)
+
+Agregar.OnServerEvent:Connect(function(pl, idx)
+	if type(idx) ~= "number" then return end
+	idx = math.floor(idx)
+	local c = Canciones[idx]
+	if not c then return end
+	local ahora = os.clock()
+	if enfriamiento[pl] and ahora - enfriamiento[pl] < 2 then
+		Aviso:FireClient(pl, "Espera un momento")
+		return
+	end
+	if not valida(idx) then
+		Aviso:FireClient(pl, "Esa canción no está disponible")
+		return
+	end
+	if actual and actual.idx == idx then
+		Aviso:FireClient(pl, "Esa canción ya está sonando")
+		return
+	end
+	for _, q in ipairs(cola) do
+		if q.idx == idx then
+			Aviso:FireClient(pl, "Ya está en la cola")
+			return
+		end
+	end
+	if #cola >= MAX_COLA then
+		Aviso:FireClient(pl, "La cola está llena")
+		return
+	end
+	enfriamiento[pl] = ahora
+	table.insert(cola, {idx = idx, por = pl.DisplayName})
+	Aviso:FireClient(pl, "Agregada a la cola: " .. c.Nombre)
+	difundir()
+end)
+
+Saltar.OnServerEvent:Connect(function(pl)
+	if not actual then return end
+	votos[pl.UserId] = true
+	revisarSaltar()
+	difundir()
+end)
+
+-- favoritos (se guardan con DataStore; si no está activo en Studio solo duran la sesión)
+local store
+pcall(function() store = DSS:GetDataStore("FavoritosMusica_v1") end)
+local favoritos = {}
+
+local function cargarFavs(pl)
+	local f = {}
+	if store then
+		local ok, data = pcall(function() return store:GetAsync("u" .. pl.UserId) end)
+		if ok and type(data) == "table" then
+			for _, n in ipairs(data) do f[n] = true end
+		end
+	end
+	favoritos[pl] = f
+end
+
+local function guardarFavs(pl)
+	local f = favoritos[pl]
+	if not store or not f then return end
+	local arr = {}
+	for n in pairs(f) do table.insert(arr, n) end
+	pcall(function() store:SetAsync("u" .. pl.UserId, arr) end)
+end
+
+Favorito.OnServerEvent:Connect(function(pl, nombre)
+	if type(nombre) ~= "string" or not porNombre[nombre] then return end
+	local f = favoritos[pl]
+	if not f then return end
+	if f[nombre] then f[nombre] = nil else f[nombre] = true end
+	task.spawn(guardarFavs, pl)
+end)
+
+Obtener.OnServerInvoke = function(pl)
+	local t0 = os.clock()
+	while not favoritos[pl] and os.clock() - t0 < 6 do task.wait(0.1) end
+	local arr = {}
+	for n in pairs(favoritos[pl] or {}) do table.insert(arr, n) end
+	return {estado = snapshot(), favs = arr}
+end
+
+Players.PlayerAdded:Connect(function(pl) task.spawn(cargarFavs, pl) end)
+for _, pl in ipairs(Players:GetPlayers()) do task.spawn(cargarFavs, pl) end
+
+Players.PlayerRemoving:Connect(function(pl)
+	guardarFavs(pl)
+	votos[pl.UserId] = nil
+	favoritos[pl] = nil
+	enfriamiento[pl] = nil
+	task.defer(function()
+		revisarSaltar()
+		difundir()
+	end)
+end)
+]]></ProtectedString></Properties></Item></Item><Item class="StarterPlayer" referent="R_StarterPlayerStarterPlayer"><Properties><string name="Name">StarterPlayer</string></Properties><Item class="StarterPlayerScripts" referent="R_StarterPlayerScriptsStarterPlayerScripts"><Properties><string name="Name">StarterPlayerScripts</string></Properties><Item class="LocalScript" referent="R_MusicaClienteLocalScript"><Properties><string name="Name">MusicaCliente</string><ProtectedString name="Source"><![CDATA[-- MUSICA GLOBAL (cliente): panel "OBS" + reproducción sincronizada
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local ContentProvider = game:GetService("ContentProvider")
+
+local player = Players.LocalPlayer
+local R = RS:WaitForChild("MusicaRemotes")
+local Canciones = require(RS:WaitForChild("Canciones"))
+
+local BLANCO = Color3.fromRGB(255, 255, 255)
+local NEGRO = Color3.fromRGB(0, 0, 0)
+local GRIS = Color3.fromRGB(110, 110, 110)
+local GRIS_TXT = Color3.fromRGB(190, 190, 190)
+local FONDO = Color3.fromRGB(22, 22, 22)
+local FILA = Color3.fromRGB(34, 34, 34)
+local ROJO = Color3.fromRGB(200, 25, 25)
+local ROSA = Color3.fromRGB(255, 90, 130)
+local F_TITULO = Enum.Font.FredokaOne
+local F_BOLD = Enum.Font.GothamBold
+local F_REG = Enum.Font.Gotham
+
+local function new(clase, props, padre)
+	local o = Instance.new(clase)
+	for k, v in pairs(props) do o[k] = v end
+	o.Parent = padre
+	return o
+end
+local function esquina(o, r)
+	return new("UICorner", {CornerRadius = UDim.new(0, r)}, o)
+end
+local function relleno(o, v)
+	return new("UIPadding", {
+		PaddingTop = UDim.new(v, 0), PaddingBottom = UDim.new(v, 0),
+		PaddingLeft = UDim.new(v, 0), PaddingRight = UDim.new(v, 0),
+	}, o)
+end
+
+-- sonido local (cada jugador controla su volumen)
+local sonido = Instance.new("Sound")
+sonido.Name = "MusicaGlobal"
+sonido.Looped = false
+sonido.Volume = 1
+sonido.Parent = SoundService
+
+-- ---------- interfaz ----------
+local gui = new("ScreenGui", {
+	Name = "OBSMusica", ResetOnSpawn = false, DisplayOrder = 50,
+	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+}, player:WaitForChild("PlayerGui"))
+
+local abrir = new("TextButton", {
+	Name = "Abrir", Size = UDim2.new(0, 50, 0, 50), Position = UDim2.new(0, 10, 0.5, -25),
+	BackgroundColor3 = Color3.fromRGB(20, 20, 20), Text = "♪", TextColor3 = BLANCO,
+	Font = F_BOLD, TextSize = 30,
+}, gui)
+esquina(abrir, 25)
+new("UIStroke", {Color = Color3.fromRGB(110, 110, 110), Thickness = 2}, abrir)
+
+local panel = new("Frame", {
+	Name = "Panel", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0),
+	Size = UDim2.new(0.7, 0, 0.8, 0), BackgroundColor3 = FONDO, Visible = false,
+}, gui)
+esquina(panel, 4)
+new("UIStroke", {Color = Color3.fromRGB(95, 95, 95), Thickness = 3}, panel)
+
+local function texto(props, padre)
+	props.BackgroundTransparency = 1
+	props.TextScaled = true
+	props.Font = props.Font or F_BOLD
+	props.TextColor3 = props.TextColor3 or BLANCO
+	local t = new("TextLabel", props, padre)
+	return t
+end
+
+texto({Text = "OBS", Font = F_TITULO, Position = UDim2.new(0.04, 0, 0.05, 0), Size = UDim2.new(0.22, 0, 0.2, 0),
+	TextXAlignment = Enum.TextXAlignment.Left}, panel)
+
+local cerrar = new("TextButton", {
+	Text = "X", Font = F_TITULO, TextScaled = true, TextColor3 = ROJO, BackgroundTransparency = 1,
+	Position = UDim2.new(0.915, 0, 0.05, 0), Size = UDim2.new(0.07, 0, 0.14, 0),
+}, panel)
+
+-- búsqueda
+local cajaBusq = new("Frame", {Position = UDim2.new(0.36, 0, 0.075, 0), Size = UDim2.new(0.25, 0, 0.095, 0),
+	BackgroundColor3 = Color3.fromRGB(40, 40, 40)}, panel)
+esquina(cajaBusq, 16)
+local busq = new("TextBox", {
+	Position = UDim2.new(0.08, 0, 0, 0), Size = UDim2.new(0.9, 0, 1, 0), BackgroundTransparency = 1,
+	Text = "", PlaceholderText = "Search...", PlaceholderColor3 = GRIS_TXT, TextColor3 = BLANCO,
+	Font = F_BOLD, TextScaled = true, TextXAlignment = Enum.TextXAlignment.Left, ClearTextOnFocus = false,
+}, cajaBusq)
+relleno(busq, 0.12)
+
+-- saltar
+local btnSaltar = new("TextButton", {
+	Text = "Saltar  0/10", Font = F_TITULO, TextScaled = true, TextColor3 = NEGRO, BackgroundColor3 = BLANCO,
+	Position = UDim2.new(0.66, 0, 0.07, 0), Size = UDim2.new(0.18, 0, 0.1, 0), AutoButtonColor = false,
+}, panel)
+esquina(btnSaltar, 16)
+relleno(btnSaltar, 0.14)
+
+-- botones laterales
+local pestanaActual = "Reproductor"
+local botonesPestana = {}
+local function crearPestana(nombre, etiqueta, y)
+	local b = new("TextButton", {
+		Text = etiqueta, Font = F_TITULO, TextScaled = true, TextColor3 = BLANCO, BackgroundColor3 = GRIS,
+		Position = UDim2.new(0.02, 0, y, 0), Size = UDim2.new(0.21, 0, 0.118, 0), AutoButtonColor = false,
+	}, panel)
+	esquina(b, 20)
+	relleno(b, 0.17)
+	botonesPestana[nombre] = b
+	return b
+end
+crearPestana("Reproductor", "♪ Reproductor", 0.27)
+crearPestana("Playlist", "☰ Playlist", 0.44)
+crearPestana("Favorite", "♥ Favorite", 0.615)
+
+-- volumen
+local volLabel = texto({Text = "Volume", Font = F_REG, Position = UDim2.new(0.07, 0, 0.84, 0), Size = UDim2.new(0.1, 0, 0.06, 0),
+	TextXAlignment = Enum.TextXAlignment.Left}, panel)
+local volPct = texto({Text = "100%", Font = F_REG, Position = UDim2.new(0.17, 0, 0.84, 0), Size = UDim2.new(0.06, 0, 0.06, 0),
+	TextXAlignment = Enum.TextXAlignment.Right, TextColor3 = GRIS_TXT}, panel)
+local pista = new("TextButton", {Text = "", AutoButtonColor = false, Position = UDim2.new(0.02, 0, 0.915, 0),
+	Size = UDim2.new(0.21, 0, 0.04, 0), BackgroundColor3 = Color3.fromRGB(45, 45, 45)}, panel)
+esquina(pista, 10)
+local relleno_vol = new("Frame", {Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = BLANCO}, pista)
+esquina(relleno_vol, 10)
+local perilla = new("Frame", {AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, 0, 0.5, 0),
+	Size = UDim2.new(0, 18, 0, 18), BackgroundColor3 = GRIS_TXT}, pista)
+esquina(perilla, 9)
+
+local function fijarVolumen(v)
+	v = math.clamp(v, 0, 1)
+	sonido.Volume = v
+	relleno_vol.Size = UDim2.new(v, 0, 1, 0)
+	perilla.Position = UDim2.new(v, 0, 0.5, 0)
+	volPct.Text = math.floor(v * 100 + 0.5) .. "%"
+end
+local arrastrando = false
+local function moverVol(pos)
+	fijarVolumen((pos.X - pista.AbsolutePosition.X) / pista.AbsoluteSize.X)
+end
+pista.InputBegan:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+		arrastrando = true
+		moverVol(i.Position)
+	end
+end)
+UserInputService.InputChanged:Connect(function(i)
+	if arrastrando and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+		moverVol(i.Position)
+	end
+end)
+UserInputService.InputEnded:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+		arrastrando = false
+	end
+end)
+
+-- categorías
+local categoria = "Todos"
+local botonesCat = {}
+local cats = {"Todos", "Reggaeton", "Regional", "House"}
+for i, nombre in ipairs(cats) do
+	local b = new("TextButton", {
+		Text = "♪ " .. nombre, Font = F_BOLD, TextScaled = true, TextColor3 = BLANCO, BackgroundColor3 = GRIS,
+		Position = UDim2.new(0.272 + (i - 1) * 0.109, 0, 0.2, 0), Size = UDim2.new(0.087, 0, 0.05, 0), AutoButtonColor = false,
+	}, panel)
+	esquina(b, 8)
+	relleno(b, 0.14)
+	botonesCat[nombre] = b
+end
+
+-- lista
+local lista = new("ScrollingFrame", {
+	Position = UDim2.new(0.28, 0, 0.27, 0), Size = UDim2.new(0.415, 0, 0.69, 0), BackgroundTransparency = 1,
+	BorderSizePixel = 0, ScrollBarThickness = 4, CanvasSize = UDim2.new(0, 0, 0, 0),
+	AutomaticCanvasSize = Enum.AutomaticSize.Y,
+}, panel)
+new("UIListLayout", {Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder}, lista)
+
+-- tarjeta de canción actual
+local portada = new("Frame", {Position = UDim2.new(0.717, 0, 0.22, 0), Size = UDim2.new(0.27, 0, 0.47, 0),
+	BackgroundColor3 = Color3.fromRGB(165, 165, 165)}, panel)
+esquina(portada, 14)
+new("UIStroke", {Color = BLANCO, Thickness = 4}, portada)
+local function pieza(x, y, w, h, redondo)
+	local f = new("Frame", {Position = UDim2.new(x, 0, y, 0), Size = UDim2.new(w, 0, h, 0), BackgroundColor3 = NEGRO,
+		BorderSizePixel = 0}, portada)
+	if redondo then esquina(f, 100) end
+	return f
+end
+pieza(0.28, 0.62, 0.22, 0.14, true)    -- cabeza 1
+pieza(0.62, 0.55, 0.22, 0.14, true)    -- cabeza 2
+pieza(0.46, 0.22, 0.045, 0.5, false)   -- plica 1
+pieza(0.80, 0.15, 0.045, 0.5, false)   -- plica 2
+pieza(0.46, 0.2, 0.385, 0.09, false)   -- barra
+
+local nombreActual = texto({Text = "Sin música", Position = UDim2.new(0.7, 0, 0.7, 0), Size = UDim2.new(0.3, 0, 0.085, 0),
+	Font = F_BOLD}, panel)
+local artistaActual = texto({Text = "", Font = F_REG, Position = UDim2.new(0.7, 0, 0.79, 0), Size = UDim2.new(0.3, 0, 0.06, 0)}, panel)
+local pistaProg = new("Frame", {Position = UDim2.new(0.74, 0, 0.87, 0), Size = UDim2.new(0.21, 0, 0.03, 0),
+	BackgroundColor3 = Color3.fromRGB(35, 35, 35)}, panel)
+esquina(pistaProg, 8)
+local barraProg = new("Frame", {Size = UDim2.new(0, 0, 1, 0), BackgroundColor3 = BLANCO}, pistaProg)
+esquina(barraProg, 8)
+local tIzq = texto({Text = "0:00", Font = F_REG, Position = UDim2.new(0.74, 0, 0.905, 0), Size = UDim2.new(0.06, 0, 0.045, 0),
+	TextXAlignment = Enum.TextXAlignment.Left, TextColor3 = GRIS_TXT}, panel)
+local tDer = texto({Text = "0:00", Font = F_REG, Position = UDim2.new(0.89, 0, 0.905, 0), Size = UDim2.new(0.06, 0, 0.045, 0),
+	TextXAlignment = Enum.TextXAlignment.Right, TextColor3 = GRIS_TXT}, panel)
+
+-- aviso emergente
+local toast = new("TextLabel", {
+	AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 14), Size = UDim2.new(0, 320, 0, 38),
+	BackgroundColor3 = Color3.fromRGB(20, 20, 20), TextColor3 = BLANCO, Font = F_BOLD, TextSize = 16,
+	Text = "", Visible = false,
+}, gui)
+esquina(toast, 10)
+local toastId = 0
+local function aviso(msg)
+	toastId += 1
+	local mi = toastId
+	toast.Text = msg
+	toast.Visible = true
+	task.delay(2.5, function()
+		if toastId == mi then toast.Visible = false end
+	end)
+end
+
+-- ---------- estado ----------
+local estado = {cola = {}, votos = 0, req = 1}
+local actual = nil
+local favs = {}
+local votadoPara = nil
+
+local function fmt(s)
+	s = math.max(0, math.floor(s))
+	return string.format("%d:%02d", s // 60, s % 60)
+end
+
+local function indicesOrdenados()
+	local t = {}
+	for i = 1, #Canciones do table.insert(t, i) end
+	table.sort(t, function(a, b) return string.lower(Canciones[a].Nombre) < string.lower(Canciones[b].Nombre) end)
+	return t
+end
+local ordenados = indicesOrdenados()
+
+local function limpiarLista()
+	for _, h in ipairs(lista:GetChildren()) do
+		if h:IsA("GuiObject") then h:Destroy() end
+	end
+end
+
+local function fila(orden, titulo, artista, nombreFav, alClick)
+	local f = new("Frame", {Size = UDim2.new(1, -8, 0, 62), BackgroundColor3 = FILA, LayoutOrder = orden}, lista)
+	esquina(f, 8)
+	new("UIStroke", {Color = Color3.fromRGB(55, 55, 55), Thickness = 1}, f)
+	local boton = new("TextButton", {Text = "", BackgroundTransparency = 1, Size = UDim2.new(1, 0, 1, 0), ZIndex = 1}, f)
+	local t = texto({Text = titulo, Position = UDim2.new(0.04, 0, 0.08, 0), Size = UDim2.new(0.72, 0, 0.5, 0),
+		TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 2}, f)
+	new("UITextSizeConstraint", {MaxTextSize = 22, MinTextSize = 8}, t)
+	local a = texto({Text = artista or "", Font = F_REG, Position = UDim2.new(0.04, 0, 0.58, 0), Size = UDim2.new(0.72, 0, 0.32, 0),
+		TextXAlignment = Enum.TextXAlignment.Left, TextColor3 = GRIS_TXT, ZIndex = 2}, f)
+	new("UITextSizeConstraint", {MaxTextSize = 16, MinTextSize = 8}, a)
+	if alClick then boton.MouseButton1Click:Connect(alClick) end
+	if nombreFav then
+		local h = new("TextButton", {
+			Text = "♥", Font = F_BOLD, TextScaled = true, BackgroundTransparency = 1, ZIndex = 3,
+			TextColor3 = favs[nombreFav] and ROSA or GRIS_TXT,
+			Position = UDim2.new(0.82, 0, 0.12, 0), Size = UDim2.new(0.14, 0, 0.76, 0),
+		}, f)
+		h.MouseButton1Click:Connect(function()
+			favs[nombreFav] = not favs[nombreFav] or nil
+			h.TextColor3 = favs[nombreFav] and ROSA or GRIS_TXT
+			R.Favorito:FireServer(nombreFav)
+			if pestanaActual == "Favorite" then task.defer(function() render() end) end
+		end)
+	end
+	return f
+end
+
+local function mensajeVacio(txt)
+	local l = texto({Text = txt, Font = F_REG, Size = UDim2.new(1, -8, 0, 70), TextColor3 = GRIS_TXT, LayoutOrder = 1}, lista)
+	new("UITextSizeConstraint", {MaxTextSize = 18, MinTextSize = 8}, l)
+end
+
+function render()
+	limpiarLista()
+	local q = string.lower(busq.Text or "")
+	local function pasa(c)
+		if categoria ~= "Todos" and c.Categoria ~= categoria then return false end
+		if q ~= "" then
+			local n = string.lower(c.Nombre)
+			local ar = string.lower(c.Artista or "")
+			if not string.find(n, q, 1, true) and not string.find(ar, q, 1, true) then return false end
+		end
+		return true
+	end
+	if pestanaActual == "Reproductor" then
+		for orden, i in ipairs(ordenados) do
+			local c = Canciones[i]
+			if pasa(c) then
+				fila(orden, c.Nombre, c.Artista, c.Nombre, function() R.Agregar:FireServer(i) end)
+			end
+		end
+	elseif pestanaActual == "Playlist" then
+		local n = 0
+		for pos, item in ipairs(estado.cola) do
+			local c = Canciones[item.idx]
+			if c and pasa(c) then
+				n += 1
+				fila(pos, "#" .. pos .. "  " .. c.Nombre, c.Artista, c.Nombre, nil)
+			end
+		end
+		if n == 0 then mensajeVacio("La cola está vacía. Toca una canción en Reproductor para agregarla.") end
+	else
+		local n = 0
+		for orden, i in ipairs(ordenados) do
+			local c = Canciones[i]
+			if favs[c.Nombre] and pasa(c) then
+				n += 1
+				fila(orden, c.Nombre, c.Artista, c.Nombre, function() R.Agregar:FireServer(i) end)
+			end
+		end
+		if n == 0 then mensajeVacio("Aún no tienes favoritas. Toca el corazón de una canción.") end
+	end
+end
+
+local function pintarBotones()
+	for nombre, b in pairs(botonesPestana) do
+		local activo = nombre == pestanaActual
+		b.BackgroundColor3 = activo and BLANCO or GRIS
+		b.TextColor3 = activo and NEGRO or BLANCO
+	end
+	for nombre, b in pairs(botonesCat) do
+		local activo = nombre == categoria
+		b.BackgroundColor3 = activo and BLANCO or GRIS
+		b.TextColor3 = activo and NEGRO or BLANCO
+	end
+end
+
+for nombre, b in pairs(botonesPestana) do
+	b.MouseButton1Click:Connect(function()
+		pestanaActual = nombre
+		pintarBotones()
+		render()
+	end)
+end
+for nombre, b in pairs(botonesCat) do
+	b.MouseButton1Click:Connect(function()
+		categoria = nombre
+		pintarBotones()
+		render()
+	end)
+end
+busq:GetPropertyChangedSignal("Text"):Connect(render)
+
+btnSaltar.MouseButton1Click:Connect(function()
+	if not actual then aviso("No hay música sonando") return end
+	if votadoPara == actual.inicio then aviso("Ya votaste para saltar") return end
+	votadoPara = actual.inicio
+	R.Saltar:FireServer()
+end)
+
+local function pintarSaltar()
+	btnSaltar.Text = "Saltar  " .. estado.votos .. "/" .. estado.req
+end
+
+-- reproducir sincronizado con el servidor
+local function reproducir(mia)
+	local c = Canciones[mia.idx]
+	if not c then return end
+	sonido:Stop()
+	sonido.SoundId = "rbxassetid://" .. c.Id
+	task.spawn(function()
+		pcall(function() ContentProvider:PreloadAsync({sonido}) end)
+		if actual ~= mia then return end
+		local t0 = os.clock()
+		while sonido.TimeLength <= 0 and os.clock() - t0 < 8 do task.wait(0.1) end
+		if actual ~= mia then return end
+		local pos = workspace:GetServerTimeNow() - mia.inicio
+		if sonido.TimeLength > 0 then
+			sonido.TimePosition = math.clamp(pos, 0, math.max(0, sonido.TimeLength - 0.2))
+		end
+		sonido:Play()
+	end)
+end
+
+local function aplicar(e)
+	estado = e
+	local nuevo = e.actual
+	if nuevo then
+		if not actual or actual.inicio ~= nuevo.inicio then
+			actual = nuevo
+			reproducir(actual)
+			local c = Canciones[actual.idx]
+			nombreActual.Text = c and c.Nombre or "..."
+			artistaActual.Text = c and (c.Artista or "") or ""
+		end
+	else
+		actual = nil
+		sonido:Stop()
+		nombreActual.Text = "Sin música"
+		artistaActual.Text = ""
+	end
+	pintarSaltar()
+	if pestanaActual == "Playlist" then render() end
+end
+
+R:WaitForChild("Estado").OnClientEvent:Connect(aplicar)
+R:WaitForChild("Aviso").OnClientEvent:Connect(aviso)
+
+-- progreso + corrección de desfase
+local ultimaCorreccion = 0
+RunService.Heartbeat:Connect(function()
+	if actual then
+		local pos = math.clamp(workspace:GetServerTimeNow() - actual.inicio, 0, actual.dur)
+		barraProg.Size = UDim2.new(pos / actual.dur, 0, 1, 0)
+		tIzq.Text = fmt(pos)
+		tDer.Text = fmt(actual.dur)
+		if sonido.IsPlaying and os.clock() - ultimaCorreccion > 8 then
+			ultimaCorreccion = os.clock()
+			if math.abs(sonido.TimePosition - pos) > 2 then sonido.TimePosition = pos end
+		end
+	else
+		barraProg.Size = UDim2.new(0, 0, 1, 0)
+		tIzq.Text = "0:00"
+		tDer.Text = "0:00"
+	end
+end)
+
+abrir.MouseButton1Click:Connect(function()
+	panel.Visible = not panel.Visible
+	if panel.Visible then render() end
+end)
+cerrar.MouseButton1Click:Connect(function() panel.Visible = false end)
+
+pintarBotones()
+fijarVolumen(1)
+render()
+
+-- carga inicial (también para quien entra con música sonando)
+task.spawn(function()
+	local datos = R:WaitForChild("Obtener"):InvokeServer()
+	if datos then
+		for _, n in ipairs(datos.favs or {}) do favs[n] = true end
+		aplicar(datos.estado)
+		render()
+	end
+end)
+]]></ProtectedString></Properties></Item></Item></Item></roblox>
