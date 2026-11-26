@@ -1,0 +1,128 @@
+<roblox version="4">
+<Item class="Lighting" referent="LT"><Properties><string name="Name">Lighting</string><double name="ClockTime">0</double><float name="Brightness">0.4</float><Color3 name="Ambient"><R>0.12</R><G>0.12</G><B>0.18</B></Color3><Color3 name="OutdoorAmbient"><R>0.15</R><G>0.15</G><B>0.22</B></Color3></Properties><Item class="BloomEffect" referent="BL"><Properties><string name="Name">Bloom</string><float name="Intensity">0.5</float><float name="Size">28</float><float name="Threshold">1.6</float></Properties></Item></Item>
+<Item class="Workspace" referent="WS"><Properties><string name="Name">Workspace</string></Properties>
+<Item class="Model" referent="PISO"><Properties><string name="Name">PisoPrueba</string></Properties>
+<Item class="Part" referent="PISOP"><Properties><string name="Name">Piso</string><bool name="Anchored">true</bool><token name="Material">272</token><token name="shape">1</token><Color3uint8 name="Color3uint8">4280690734</Color3uint8><Vector3 name="size"><X>200</X><Y>1</Y><Z>200</Z></Vector3><CoordinateFrame name="CFrame"><X>0</X><Y>-0.5</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame></Properties></Item>
+<Item class="SpawnLocation" referent="SPW"><Properties><string name="Name">Spawn</string><bool name="Anchored">true</bool><bool name="Neutral">true</bool><int name="Duration">0</int><float name="Transparency">0.6</float><Vector3 name="size"><X>6</X><Y>1</Y><Z>6</Z></Vector3><CoordinateFrame name="CFrame"><X>0</X><Y>0.5</Y><Z>40</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame></Properties></Item>
+</Item>
+<Item class="Model" referent="LUZM"><Properties><string name="Name">LuzConcierto</string><Ref name="PrimaryPart">Fijo0</Ref></Properties>
+<Item class="Folder" referent="FFijo"><Properties><string name="Name">Fijo</string></Properties>
+<Item class="Part" referent="Fijo0"><Properties><string name="Name">Base</string><bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">1</token><Color3uint8 name="Color3uint8">4279900701</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>6.000</X><Y>1.000</Y><Z>6.000</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>0.500</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Fijo1"><Properties><string name="Name">PlacaBase</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">1</token><Color3uint8 name="Color3uint8">4282796110</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>4.400</X><Y>0.300</Y><Z>4.400</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>1.100</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+</Item>
+<Item class="Folder" referent="FPan"><Properties><string name="Name">Pan</string></Properties>
+<Item class="Part" referent="Pan0"><Properties><string name="Name">Columna</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4282796110</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>3.000</X><Y>2.400</Y><Z>2.400</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>2.600</Y><Z>0.000</Z><R00>0.00000</R00><R01>-1.00000</R01><R02>0.00000</R02><R10>1.00000</R10><R11>0.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Pan1"><Properties><string name="Name">Yugo</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">1</token><Color3uint8 name="Color3uint8">4279900701</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>7.400</X><Y>0.900</Y><Z>2.000</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>3.900</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Pan2"><Properties><string name="Name">Brazo</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">1</token><Color3uint8 name="Color3uint8">4279900701</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>0.900</X><Y>6.000</Y><Z>2.000</Z></Vector3><CoordinateFrame name="CFrame"><X>-3.400</X><Y>6.900</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Pan3"><Properties><string name="Name">Brazo</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">1</token><Color3uint8 name="Color3uint8">4279900701</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>0.900</X><Y>6.000</Y><Z>2.000</Z></Vector3><CoordinateFrame name="CFrame"><X>3.400</X><Y>6.900</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+</Item>
+<Item class="Folder" referent="FTilt"><Properties><string name="Name">Tilt</string></Properties>
+<Item class="Part" referent="Tilt0"><Properties><string name="Name">Cabeza</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4280558632</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>6.000</X><Y>4.600</Y><Z>4.600</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>0.000</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt1"><Properties><string name="Name">Tapa</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4279900701</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>1.400</X><Y>5.200</Y><Z>5.200</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>3.600</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt2"><Properties><string name="Name">Aro</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4279900701</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>0.700</X><Y>5.000</Y><Z>5.000</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-3.200</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt3"><Properties><string name="Name">Pivote</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4282796110</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>0.800</X><Y>1.400</Y><Z>1.400</Z></Vector3><CoordinateFrame name="CFrame"><X>-2.800</X><Y>7.000</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt4"><Properties><string name="Name">Pivote</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">272</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4282796110</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>0.800</X><Y>1.400</Y><Z>1.400</Z></Vector3><CoordinateFrame name="CFrame"><X>2.800</X><Y>7.000</Y><Z>0.000</Z><R00>1.00000</R00><R01>0.00000</R01><R02>0.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>0.00000</R20><R21>0.00000</R21><R22>1.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt5"><Properties><string name="Name">Lente</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>0.350</X><Y>4.100</Y><Z>4.100</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-3.550</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties><Item class="SpotLight" referent="LUZ1"><Properties><string name="Name">Luz</string><token name="Face">5</token><float name="Range">70</float><float name="Angle">40</float><float name="Brightness">8</float><bool name="Shadows">false</bool><Color3 name="Color"><R>1</R><G>0.9</G><B>0.25</B></Color3></Properties></Item></Item>
+<Item class="Part" referent="Tilt6"><Properties><string name="Name">Nucleo</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.7</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>80.000</X><Y>0.900</Y><Z>0.900</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-43.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt7"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>1.800</Y><Z>1.800</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-7.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt8"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>3.150</Y><Z>3.150</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-15.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt9"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>4.500</Y><Z>4.500</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-23.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt10"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>5.850</Y><Z>5.850</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-31.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt11"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>7.200</Y><Z>7.200</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-39.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt12"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>8.550</Y><Z>8.550</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-47.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt13"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>9.900</Y><Z>9.900</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-55.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt14"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>11.250</Y><Z>11.250</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-63.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt15"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>12.600</Y><Z>12.600</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-71.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+<Item class="Part" referent="Tilt16"><Properties><string name="Name">Haz</string><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanTouch">false</bool><bool name="CastShadow">false</bool><float name="Transparency">0.9</float><token name="Material">288</token><token name="shape">2</token><Color3uint8 name="Color3uint8">4294960700</Color3uint8><token name="TopSurface">0</token><token name="BottomSurface">0</token><Vector3 name="size"><X>8.400</X><Y>13.950</Y><Z>13.950</Z></Vector3><CoordinateFrame name="CFrame"><X>0.000</X><Y>7.000</Y><Z>-79.700</Z><R00>0.00000</R00><R01>0.00000</R01><R02>1.00000</R02><R10>0.00000</R10><R11>1.00000</R11><R12>0.00000</R12><R20>-1.00000</R20><R21>0.00000</R21><R22>0.00000</R22></CoordinateFrame></Properties></Item>
+</Item>
+<Item class="Configuration" referent="CFG"><Properties><string name="Name">Ajustes</string></Properties>
+<Item class="NumberValue" referent="NVVelocidad"><Properties><string name="Name">Velocidad</string><double name="Value">1</double></Properties></Item>
+<Item class="NumberValue" referent="NVPanMax"><Properties><string name="Name">PanMax</string><double name="Value">100</double></Properties></Item>
+<Item class="NumberValue" referent="NVTiltMin"><Properties><string name="Name">TiltMin</string><double name="Value">5</double></Properties></Item>
+<Item class="NumberValue" referent="NVTiltMax"><Properties><string name="Name">TiltMax</string><double name="Value">70</double></Properties></Item>
+<Item class="NumberValue" referent="NVSegundosColor"><Properties><string name="Name">SegundosColor</string><double name="Value">4</double></Properties></Item>
+<Item class="NumberValue" referent="NVFase"><Properties><string name="Name">Fase</string><double name="Value">0</double></Properties></Item>
+</Item>
+<Item class="Script" referent="SCR"><Properties><string name="Name">MoverLuz</string><token name="RunContext">2</token><ProtectedString name="Source"><![CDATA[
+-- Luz de concierto movil. Ajustes: carpeta "Ajustes" (valores editables).
+local RunService = game:GetService("RunService")
+local modelo = script.Parent
+local base = modelo:WaitForChild("Fijo"):WaitForChild("Base")
+local carpetaPan = modelo:WaitForChild("Pan")
+local carpetaTilt = modelo:WaitForChild("Tilt")
+local ajustes = modelo:WaitForChild("Ajustes")
+local lente = carpetaTilt:WaitForChild("Lente")
+local foco = lente:WaitForChild("Luz")
+
+local function val(nombre, def)
+	local v = ajustes:FindFirstChild(nombre)
+	if v then return v.Value end
+	return def
+end
+
+local ALTURA = 6.5
+local baseCF = base.CFrame
+local pivoteInicial = baseCF * CFrame.new(0, ALTURA, 0)
+
+local partesPan, partesTilt, colorables = {}, {}, {}
+for _, p in ipairs(carpetaPan:GetChildren()) do
+	if p:IsA("BasePart") then
+		table.insert(partesPan, {p, baseCF:ToObjectSpace(p.CFrame)})
+	end
+end
+for _, p in ipairs(carpetaTilt:GetChildren()) do
+	if p:IsA("BasePart") then
+		table.insert(partesTilt, {p, pivoteInicial:ToObjectSpace(p.CFrame)})
+		if p.Name == "Haz" or p.Name == "Nucleo" or p.Name == "Lente" then
+			table.insert(colorables, p)
+		end
+	end
+end
+
+local colores = {
+	Color3.fromRGB(255, 230, 60),
+	Color3.fromRGB(60, 100, 255),
+	Color3.fromRGB(255, 60, 170),
+	Color3.fromRGB(255, 255, 255),
+	Color3.fromRGB(60, 255, 130),
+	Color3.fromRGB(255, 120, 30),
+}
+
+local fase = val("Fase", 0)
+if fase == 0 then
+	fase = (baseCF.Position.X * 0.37 + baseCF.Position.Z * 0.23) % 6.28
+end
+
+local evento = RunService:IsClient() and RunService.RenderStepped or RunService.Heartbeat
+evento:Connect(function()
+	local ahora = workspace:GetServerTimeNow()
+	local t = ahora * val("Velocidad", 1) + fase
+
+	local pan = math.rad(val("PanMax", 100)) * math.sin(t * 0.6)
+	local tmin = math.rad(val("TiltMin", 5))
+	local tmax = math.rad(val("TiltMax", 70))
+	local tilt = tmin + (tmax - tmin) * (0.5 + 0.5 * math.sin(t * 1.1 + 1.3))
+
+	local panCF = baseCF * CFrame.Angles(0, pan, 0)
+	local pivoteCF = panCF * CFrame.new(0, ALTURA, 0) * CFrame.Angles(tilt, 0, 0)
+
+	for _, d in ipairs(partesPan) do
+		d[1].CFrame = panCF * d[2]
+	end
+	for _, d in ipairs(partesTilt) do
+		d[1].CFrame = pivoteCF * d[2]
+	end
+
+	local seg = math.max(val("SegundosColor", 4), 0.5)
+	local ciclo = ahora / seg
+	local i = math.floor(ciclo) % #colores + 1
+	local j = i % #colores + 1
+	local mezcla = math.clamp((ciclo % 1 - 0.8) / 0.2, 0, 1)
+	local color = colores[i]:Lerp(colores[j], mezcla)
+	for _, p in ipairs(colorables) do
+		p.Color = color
+	end
+	foco.Color = color
+end)
+]]></ProtectedString></Properties></Item>
+</Item></Item></roblox>
